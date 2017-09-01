@@ -1,10 +1,11 @@
-var bitcore = require("bitcore-lib");
+var keyFunctions = require("./keyFunctions")
 
-var privateKey = new bitcore.PrivateKey("testnet")
-// var privateKey = bitcore.PrivateKey.fromWIF(wifKey)
-var address = privateKey.toAddress()
-var wifKey = privateKey.toWIF();
+var path = process.env.localappdata + "\\temp\\data.txt"
+var privateKey = keyFunctions.getPrivateKeyFromWifFile(path)
+var address = privateKey.toAddress();
+
 
 console.log(privateKey);
 console.log(address);
-console.log(wifKey);
+
+

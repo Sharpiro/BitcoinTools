@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2009
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinAnalyzer", "BitcoinAnalyzer\BitcoinAnalyzer.csproj", "{C7D2BBEE-4EED-40C7-B620-00615CF9A915}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BitcoinAnalyzerTests", "BitcoinAnalyzerTests\BitcoinAnalyzerTests.csproj", "{7BBD6008-4767-4D27-874D-BF3368B90F1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C7D2BBEE-4EED-40C7-B620-00615CF9A915}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7D2BBEE-4EED-40C7-B620-00615CF9A915}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7D2BBEE-4EED-40C7-B620-00615CF9A915}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7D2BBEE-4EED-40C7-B620-00615CF9A915}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BBD6008-4767-4D27-874D-BF3368B90F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BBD6008-4767-4D27-874D-BF3368B90F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BBD6008-4767-4D27-874D-BF3368B90F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BBD6008-4767-4D27-874D-BF3368B90F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {45578A1C-B6BA-4AC8-9C7C-6302759F51A1}
+	EndGlobalSection
+EndGlobal

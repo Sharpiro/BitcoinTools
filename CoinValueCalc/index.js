@@ -31,6 +31,7 @@ submit.onclick = (event) => {
             mktCap: c.mktcap,
             supply: c.supply,
             price: c.price,
+            weightedPrice: (c.price / c.supply) * 100000000,
             myAmount: c.myAmount,
             usdValue: c.usdValue,
             dailyChange: c.cap24hrChange,
@@ -39,9 +40,9 @@ submit.onclick = (event) => {
     })
     var totalValue = viewList.map(l => l.usdValue).reduce((prev, next) => prev + next)
     var excelList = viewList.map((coin, index) => {
-        return (index + 1) + "\t" + coin.short + "\t" + coin.mktCap + "\t" + coin.supply + "\t" + coin.price + "\t" + coin.myAmount + "\t" + coin.usdValue + "\t" + coin.dailyChange + "\t" + coin.shapeshift
+        return (index + 1) + "\t" + coin.short + "\t" + coin.mktCap + "\t" + coin.supply + "\t" + coin.price + "\t" + coin.weightedPrice + "\t" + coin.myAmount + "\t" + coin.usdValue + "\t" + coin.dailyChange + "\t" + coin.shapeshift
     })
-    excelList.unshift("rank\tname\tmktCap\tsupply\tprice\tmyAmount\tusdValue\tdailyChange\tshapeshift")
+    excelList.unshift("rank\tname\tmktCap\tsupply\tprice\tweightedPrice\tmyAmount\tusdValue\tdailyChange\tshapeshift")
     outputTextArea.innerText = excelList.join("\n")
     // totalValueElement.innerText = totalValue
     console.log(viewList)

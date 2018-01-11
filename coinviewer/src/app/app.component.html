@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="container">
+    <mat-card>
+      <mat-card-content>
+        <div>
+          <mat-form-field class="coinInputField">
+            <textarea [(ngModel)]="textAreaData" matInput placeholder="Coin Data" matTextareaAutosize matAutosizeMinRows="1" matAutosizeMaxRows="5"></textarea>
+          </mat-form-field>
+        </div>
+        <div>
+          <button mat-raised-button (click)="onSubmit(textAreaData)">Submit</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<div class="row">
+  <coin-grid [entropy]="entropy" [userData]="userData" class="grid-container"></coin-grid>
+</div>

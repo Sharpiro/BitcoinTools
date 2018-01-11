@@ -1,0 +1,45 @@
+.mat-table {
+overflow: auto;
+max-height: 620px;
+} 
+
+.mat-row{
+    min-height: 20px;
+}
+
+.small-cell {
+    flex: 0 0 50px;
+    /* text-align: center; */
+}
+
+.large-cell {
+    flex: 0 0 150px;
+}
+
+.mktCap-cell{
+    flex: 0 0 125px;
+}
+
+.supply-cell{
+    flex: 0 0 125px;
+}
+
+.price-cell{
+    flex: 0 0 90px;
+}
+
+.weightedPrice-cell{
+    flex: 0 0 100px;
+}
+
+.coins-cell{
+    flex: 0 0 90px;
+}
+
+.usdValue-cell{
+    flex: 0 0 90px;
+}
+
+.dailyChange-cell{
+    flex: 0 0 90px;
+}

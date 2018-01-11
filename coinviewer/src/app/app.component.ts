@@ -7,4 +7,12 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'app';
+  textAreaData: string
+  userData: string
+  entropy: number
+
+  onSubmit(userData: string) {
+    this.entropy = Math.random()
+    this.userData = userData
+  }
 }

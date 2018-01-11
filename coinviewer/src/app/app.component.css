@@ -1,0 +1,19 @@
+.coinInputField{
+    width:100%;
+}
+
+.row{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 15px;
+}
+
+.container{
+    width:55%;
+}
+
+.grid-container{
+    min-width:975px;
+}
+

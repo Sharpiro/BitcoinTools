@@ -1,0 +1,61 @@
+<div>
+  <mat-card>
+    <mat-card-content>
+      <mat-table #table [dataSource]="dataSource" matSort>
+
+        <ng-container matColumnDef="rank">
+          <mat-header-cell class="small-cell" *matHeaderCellDef mat-sort-header> Rank </mat-header-cell>
+          <mat-cell class="small-cell" *matCellDef="let element"> {{element.rank}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="short">
+          <mat-header-cell class="small-cell" *matHeaderCellDef mat-sort-header> Short </mat-header-cell>
+          <mat-cell class="small-cell" *matCellDef="let element"> {{element.short}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="mktCap">
+          <mat-header-cell class="mktCap-cell" *matHeaderCellDef mat-sort-header> MktCap </mat-header-cell>
+          <mat-cell class="mktCap-cell" *matCellDef="let element"> {{element.mktCap | number:'0.0-0'}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="supply">
+          <mat-header-cell class="supply-cell" *matHeaderCellDef mat-sort-header> Supply </mat-header-cell>
+          <mat-cell class="supply-cell" *matCellDef="let element"> {{element.supply | number}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="price">
+          <mat-header-cell class="price-cell" *matHeaderCellDef mat-sort-header> Price </mat-header-cell>
+          <mat-cell class="price-cell" *matCellDef="let element"> {{element.price | number}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="weightedPrice">
+          <mat-header-cell class="weightedPrice-cell" *matHeaderCellDef mat-sort-header> WeightedPrice </mat-header-cell>
+          <mat-cell class="weightedPrice-cell" *matCellDef="let element"> {{element.weightedPrice | number}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="coins">
+          <mat-header-cell class="coins-cell" *matHeaderCellDef mat-sort-header> Coins </mat-header-cell>
+          <mat-cell class="coins-cell" *matCellDef="let element"> {{element.coins | number}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="usdValue">
+          <mat-header-cell class="usdValue-cell" *matHeaderCellDef mat-sort-header> UsdValue </mat-header-cell>
+          <mat-cell class="usdValue-cell" *matCellDef="let element"> {{element.usdValue | number}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="dailyChange">
+          <mat-header-cell class="dailyChange-cell" *matHeaderCellDef mat-sort-header> DailyChange </mat-header-cell>
+          <mat-cell class="dailyChange-cell" *matCellDef="let element"> {{element.dailyChange | number}}% </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="shapeshift">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Shapeshift </mat-header-cell>
+          <mat-cell *matCellDef="let element"> {{element.shapeshift}} </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+    </mat-card-content>
+  </mat-card>
+</div>

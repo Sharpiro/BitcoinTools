@@ -38,7 +38,7 @@ submit.onclick = (event) => {
             shapeshift: c.shapeshift
         }
     })
-    var totalValue = viewList.map(l => l.usdValue).reduce((prev, next) => prev + next)
+    // var totalValue = viewList.map(l => l.usdValue).reduce((prev, next) => prev + next)
     var excelList = viewList.map((coin, index) => {
         return (index + 1) + "\t" + coin.short + "\t" + coin.mktCap + "\t" + coin.supply + "\t" + coin.price + "\t" + coin.weightedPrice + "\t" + coin.myAmount + "\t" + coin.usdValue + "\t" + coin.dailyChange + "\t" + coin.shapeshift
     })
@@ -46,7 +46,7 @@ submit.onclick = (event) => {
     outputTextArea.innerText = excelList.join("\n")
     // totalValueElement.innerText = totalValue
     console.log(viewList)
-    console.log(totalValue)
+    // console.log(totalValue)
 }
 
 function refreshCoinData() {

@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
-import { MatCardModule, MatInputModule, MatTableModule, MatSortModule, MatButtonModule } from '@angular/material';
+import { MatCardModule, MatInputModule, MatTableModule, MatSortModule, MatButtonModule, MatCheckboxModule } from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CoinGridComponent } from './coin-grid/coin-grid.component';
 import { CoinGridApiService } from './coin-grid/coin-grid-api.service';
@@ -24,7 +24,8 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     BrowserAnimationsModule,
     HttpModule,
-    FormsModule 
+    FormsModule,
+    MatCheckboxModule
   ],
   providers: [
     { provide: coinGridServiceToken, useClass: CoinGridApiService }

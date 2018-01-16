@@ -10,6 +10,7 @@ export class AppComponent {
   textAreaData: string
   userData: string
   entropy: number
+  showUsdValue = false;
 
   onSubmit(userData: string) {
     this.entropy = Math.random()

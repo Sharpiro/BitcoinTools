@@ -38,6 +38,11 @@
           <mat-cell class="coins-cell" *matCellDef="let element"> {{element.coins | number}} </mat-cell>
         </ng-container>
 
+        <ng-container matColumnDef="weightedCoins">
+          <mat-header-cell class="coins-cell" *matHeaderCellDef mat-sort-header> WeightedCoins </mat-header-cell>
+          <mat-cell class="coins-cell" *matCellDef="let element"> {{element.weightedCoins | number}} </mat-cell>
+        </ng-container>
+
         <ng-container matColumnDef="usdValue">
           <mat-header-cell class="usdValue-cell" *matHeaderCellDef mat-sort-header> UsdValue </mat-header-cell>
           <mat-cell class="usdValue-cell" *matCellDef="let element"> {{element.usdValue | number}} </mat-cell>

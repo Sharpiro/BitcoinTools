@@ -9,6 +9,7 @@
         </div>
         <div>
           <button mat-raised-button (click)="onSubmit(textAreaData)">Submit</button>
+          <mat-checkbox [(ngModel)]="showUsdValue" style="padding-left:15px">Show USD Value</mat-checkbox>
         </div>
       </mat-card-content>
     </mat-card>
@@ -16,5 +17,5 @@
 </div>
 
 <div class="row">
-  <coin-grid [entropy]="entropy" [userData]="userData" class="grid-container"></coin-grid>
+  <coin-grid [entropy]="entropy" [userData]="userData" [showUsdValue]="showUsdValue" class="grid-container"></coin-grid>
 </div>

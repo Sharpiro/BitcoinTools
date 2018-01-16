@@ -10,6 +10,7 @@ import { coinGridServiceToken, CoinGridService, CoinData } from './coin-grid.int
 export class CoinGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() userData: string;
   @Input() entropy: number;
+  @Input() showUsdValue: boolean;
   displayedColumns = [
     'rank',
     'short',
@@ -18,6 +19,7 @@ export class CoinGridComponent implements OnInit, AfterViewInit, OnChanges {
     'price',
     'weightedPrice',
     'coins',
+    'weightedCoins',
     'usdValue',
     'dailyChange',
     'shapeshift'
@@ -48,8 +50,6 @@ export class CoinGridComponent implements OnInit, AfterViewInit, OnChanges {
       this.allCoinData = data
       const consolidatedList = this.toConsolidatedList(multiArray, this.allCoinData)
       this.dataSource.data = consolidatedList
-      console.log(consolidatedList)
-      console.log("child component updated")
     })
   }
 
@@ -70,7 +70,9 @@ export class CoinGridComponent implements OnInit, AfterViewInit, OnChanges {
     for (const item of allCoinData) {
       if (dictionary[item.short] != undefined) {
         item.coins = dictionary[item.short]
-        item.usdValue = item.coins * item.price
+        item.weightedCoins = (item.coins / item.supply) * 100000000
+        if (this.showUsdValue)
+          item.usdValue = item.coins * item.price
         list.push(item)
       }
     }

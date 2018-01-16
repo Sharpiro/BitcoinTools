@@ -9,6 +9,7 @@ export interface CoinData {
     price: number
     weightedPrice: number
     coins?: number
+    weightedCoins?: number
     usdValue?: number
     dailyChange: number
     shapeshift: boolean

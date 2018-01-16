@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, isDevMode } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -14,5 +14,12 @@ export class AppComponent {
   onSubmit(userData: string) {
     this.entropy = Math.random()
     this.userData = userData
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHander(event) {
+    if (!isDevMode()) {
+      return false;
+    }
   }
 }

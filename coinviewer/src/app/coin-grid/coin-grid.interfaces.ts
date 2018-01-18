@@ -11,8 +11,10 @@ export interface CoinData {
     coins?: number
     weightedCoins?: number
     usdValue?: number
+    percentUsdValue?: number
     dailyChange: number
     shapeshift: boolean
+    iconClasses?: {}
 }
 
 export interface CoinGridService {

@@ -1,5 +1,5 @@
 <div>
-  <mat-card>
+  <mat-card class="component-card">
     <mat-card-content>
       <mat-table #table [dataSource]="dataSource" matSort>
 
@@ -9,8 +9,11 @@
         </ng-container>
 
         <ng-container matColumnDef="short">
-          <mat-header-cell class="small-cell" *matHeaderCellDef mat-sort-header> Short </mat-header-cell>
-          <mat-cell class="small-cell" *matCellDef="let element"> {{element.short}} </mat-cell>
+          <mat-header-cell class="short-cell" *matHeaderCellDef mat-sort-header> Short </mat-header-cell>
+          <mat-cell class="short-cell" *matCellDef="let element">
+            <img [ngClass]="element.iconClasses" src="/assets/img_trans.gif" />
+            <span class="short-cell-text">{{element.short}}</span>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="mktCap">
@@ -46,6 +49,11 @@
         <ng-container matColumnDef="usdValue">
           <mat-header-cell class="usdValue-cell" *matHeaderCellDef mat-sort-header> UsdValue </mat-header-cell>
           <mat-cell class="usdValue-cell" *matCellDef="let element"> {{element.usdValue | number}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="percentUsdValue">
+          <mat-header-cell class="usdValue-cell" *matHeaderCellDef mat-sort-header> % UsdValue </mat-header-cell>
+          <mat-cell class="usdValue-cell" *matCellDef="let element"> {{element.percentUsdValue| percent:'1.0-2'}} </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="dailyChange">

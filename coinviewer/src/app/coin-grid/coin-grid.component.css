@@ -3,13 +3,19 @@ overflow: auto;
 max-height: 620px;
 } 
 
+.short-cell-text{
+    vertical-align: super;
+}
+
 .component-card{
     min-width:1170px;
 }
 
 .mat-row{
-    min-height: 20px;
+    min-height: 25px;
 }
+
+/* cell sizes */
 
 .small-cell {
     flex: 0 0 50px;
@@ -20,7 +26,7 @@ max-height: 620px;
 }
 
 .short-cell{
-    flex: 0 0 60px;
+    flex: 0 0 80px;
 }
 
 .mktCap-cell{
@@ -49,4 +55,87 @@ max-height: 620px;
 
 .dailyChange-cell{
     flex: 0 0 90px;
+}
+
+/* icon data */
+
+.coin-icon{
+    width: 25px;
+    height: 25px;
+}
+
+.btc-icon{
+    background: url("/assets/coinSpritesheet.png") -285px -5px;
+}
+
+.eth-icon{
+    background: url("/assets/coinSpritesheet.png") -285px -495px;
+}
+
+.xrp-icon{
+    background: url("/assets/coinSpritesheet.png") -775px -425px;
+}
+
+.bch-icon{
+    background: url("/assets/coinSpritesheet.png") -285px -40px;
+}
+
+.ltc-icon{
+    background: url("/assets/coinSpritesheet.png") -635px -495px;
+}
+
+.xlm-icon{
+    background: url("/assets/coinSpritesheet.png") -75px -810px;
+}
+
+.xmr-icon{
+    background: url("/assets/coinSpritesheet.png") -670px -635px;
+}
+
+.qtum-icon{
+    background: url("/assets/coinSpritesheet.png") -355px -740px;
+}
+
+.xrb-icon{
+    background: url("/assets/coinSpritesheet.png") -705px -740px;
+}
+
+.omg-icon{
+    background: url("/assets/coinSpritesheet.png") -145px -705px;
+}
+
+.ven-icon{
+    background: url("/assets/coinSpritesheet.png") -460px -845px;
+}
+
+.zec-icon{
+    background: url("/assets/coinSpritesheet.png") -110px -880px;
+}
+
+.doge-icon{
+    background: url("/assets/coinSpritesheet.png") -75px -460px;
+}
+
+.zrx-icon{
+    background: url("/assets/coinSpritesheet.png") -40px -5px;
+}
+
+.drgn-icon{
+    background: url("/assets/coinSpritesheet.png") -320px -460px;
+}
+
+.rep-icon{
+    background: url("/assets/coinSpritesheet.png") -110px -215px;
+}
+
+.wtc-icon{
+    background: url("/assets/coinSpritesheet.png") -880px -285px;
+}
+
+.req-icon{
+    background: url("/assets/coinSpritesheet.png") -775px -180px;
+}
+
+.eng-icon{
+    background: url("/assets/coinSpritesheet.png") -110px -495px;
 }

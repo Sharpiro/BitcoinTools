@@ -14,6 +14,7 @@ export interface CoinData {
     percentUsdValue?: number
     dailyChange: number
     shapeshift: boolean
+    iconClasses?: {}
 }
 
 export interface CoinGridService {

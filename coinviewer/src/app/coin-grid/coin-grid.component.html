@@ -10,7 +10,10 @@
 
         <ng-container matColumnDef="short">
           <mat-header-cell class="short-cell" *matHeaderCellDef mat-sort-header> Short </mat-header-cell>
-          <mat-cell class="short-cell" *matCellDef="let element"> {{element.short}} </mat-cell>
+          <mat-cell class="short-cell" *matCellDef="let element">
+            <img [ngClass]="element.iconClasses" src="/assets/img_trans.gif" />
+            <span class="short-cell-text">{{element.short}}</span>
+          </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="mktCap">

@@ -33,8 +33,9 @@ export class CoinGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit() {
     this.coinGridService.getCoinCapData().subscribe(data => {
-      this.dataSource.data = data
-      this.allCoinData = data
+      const iconCoinData = this.getCoinDataWithIcons(data)
+      this.dataSource.data = iconCoinData
+      this.allCoinData = iconCoinData
     })
   }
 
@@ -48,10 +49,20 @@ export class CoinGridComponent implements OnInit, AfterViewInit, OnChanges {
 
     const multiArray = this.toMultiArray(this.userData)
     this.coinGridService.getCoinCapData().subscribe(data => {
-      this.allCoinData = data
+      this.allCoinData = this.getCoinDataWithIcons(data)
       const consolidatedList = this.toConsolidatedList(multiArray, this.allCoinData)
       this.dataSource.data = consolidatedList
     })
+  }
+
+  getCoinDataWithIcons = (allCoinData: CoinData[]) => {
+    for (const coinInfo of allCoinData) {
+      var temp = `${coinInfo.short.toLocaleLowerCase()}-icon`
+      coinInfo.iconClasses = {}
+      coinInfo.iconClasses[`coin-icon`] = true
+      coinInfo.iconClasses[`${coinInfo.short.toLocaleLowerCase()}-icon`] = true
+    }
+    return allCoinData
   }
 
   toMultiArray(rawUserData: string): string[][] {

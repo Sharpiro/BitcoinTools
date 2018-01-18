@@ -1,28 +1,29 @@
-import { Component, ViewChild, OnInit, AfterViewInit, Inject, Input, OnChanges, SimpleChanges } from '@angular/core'
-import { MatTableDataSource, MatSort } from '@angular/material'
-import { coinGridServiceToken, CoinGridService, CoinData } from './coin-grid.interfaces';
+import { Component, ViewChild, OnInit, AfterViewInit, Inject, Input, OnChanges, SimpleChanges } from "@angular/core"
+import { MatTableDataSource, MatSort } from "@angular/material"
+import { coinGridServiceToken, CoinGridService, CoinData } from "./coin-grid.interfaces";
 
 @Component({
-  selector: 'coin-grid',
-  templateUrl: './coin-grid.component.html',
-  styleUrls: ['./coin-grid.component.css']
+  selector: "coin-grid",
+  templateUrl: "./coin-grid.component.html",
+  styleUrls: ["./coin-grid.component.css"]
 })
 export class CoinGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() userData: string;
   @Input() entropy: number;
   @Input() showUsdValue: boolean;
   displayedColumns = [
-    'rank',
-    'short',
-    'mktCap',
-    'supply',
-    'price',
-    'weightedPrice',
-    'coins',
-    'weightedCoins',
-    'usdValue',
-    'dailyChange',
-    'shapeshift'
+    "rank",
+    "short",
+    "mktCap",
+    "supply",
+    "price",
+    "weightedPrice",
+    "coins",
+    "weightedCoins",
+    "usdValue",
+    "percentUsdValue",
+    "dailyChange",
+    "shapeshift"
   ];
   dataSource = new MatTableDataSource();
   allCoinData: CoinData[]
@@ -32,7 +33,7 @@ export class CoinGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnInit() {
     this.coinGridService.getCoinCapData().subscribe(data => {
-      this.dataSource.data = data//.slice(0, 8)
+      this.dataSource.data = data
       this.allCoinData = data
     })
   }
@@ -61,22 +62,31 @@ export class CoinGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   toConsolidatedList(split: string[][], allCoinData: CoinData[]): CoinData[] {
     var dictionary = {}
-    var list = []
+    var selectedCoins = []
     for (const item of split) {
       if (dictionary[item[0]] == undefined) dictionary[item[0]] = 0
       dictionary[item[0]] += parseFloat(item[1].replace(",", ""))
     }
 
-    for (const item of allCoinData) {
-      if (dictionary[item.short] != undefined) {
-        item.coins = dictionary[item.short]
-        item.weightedCoins = (item.coins / item.supply) * 100000000
-        if (this.showUsdValue)
-          item.usdValue = item.coins * item.price
-        list.push(item)
+
+    var totalUsdValue = 0;
+    for (const coinInfo of allCoinData) {
+      if (dictionary[coinInfo.short] != undefined) {
+        coinInfo.coins = dictionary[coinInfo.short]
+        coinInfo.weightedCoins = (coinInfo.coins / coinInfo.supply) * 100000000
+        let usdValue = coinInfo.coins * coinInfo.price
+        coinInfo.usdValue = usdValue
+        totalUsdValue += usdValue
+        selectedCoins.push(coinInfo)
       }
     }
 
-    return list
+    for (const coinInfo of selectedCoins) {
+      coinInfo.percentUsdValue = coinInfo.usdValue / totalUsdValue
+      if (!this.showUsdValue)
+        coinInfo.usdValue = 0
+    }
+
+    return selectedCoins
   }
 }

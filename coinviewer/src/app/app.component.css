@@ -6,13 +6,25 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 15px;
+    padding: 0px 0px 15px 0px;
 }
 
 .container{
-    width:55%;
+    width:35%;
 }
 
 .grid-container{
-    min-width:1060px;
+    margin: auto;
+    width:60%;
+}
+
+@media only screen and (max-width: 1500px) {
+    .container{
+        width:100%;
+    }
+
+    .grid-container{
+        margin: left;
+        width:100%;
+    }
 }

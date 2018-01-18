@@ -3,17 +3,24 @@ overflow: auto;
 max-height: 620px;
 } 
 
+.component-card{
+    min-width:1170px;
+}
+
 .mat-row{
     min-height: 20px;
 }
 
 .small-cell {
     flex: 0 0 50px;
-    /* text-align: center; */
 }
 
 .large-cell {
     flex: 0 0 150px;
+}
+
+.short-cell{
+    flex: 0 0 60px;
 }
 
 .mktCap-cell{

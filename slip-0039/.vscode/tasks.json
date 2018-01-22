@@ -1,0 +1,10 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "taskName": "run",
+            "command": "node test.js",
+            "type": "shell"
+        }
+    ]
+}

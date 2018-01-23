@@ -3,7 +3,7 @@
     "tasks": [
         {
             "taskName": "run",
-            "command": "node test.js",
+            "command": "node index.js",
             "type": "shell"
         }
     ]

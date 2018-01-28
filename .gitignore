@@ -3,6 +3,8 @@
 
 #customs
 package-lock.json
+config.py
+objectdb
 
 # User-specific files
 *.suo

@@ -3,7 +3,7 @@
     "tasks": [
         {
             "taskName": "run",
-            "command": "node index.js",
+            "command": "py main.py",
             "type": "shell"
         }
     ]

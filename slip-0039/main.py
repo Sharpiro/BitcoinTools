@@ -5,9 +5,12 @@
 
 # See the bottom few lines for usage. Tested on Python 2 and 3.
 
-from __future__ import division
+# from __future__ import division
 import random
 import functools
+from hashlib import sha256
+import binascii
+import maths
 # import secrets
 
 # 12th Mersenne Prime
@@ -53,24 +56,26 @@ def _extended_gcd(a, b):
         (old_r, r) = (r, old_r - quotient * r)
         (old_s, s) = (s, old_s - quotient * s)
         (old_t, t) = (t, old_t - quotient * t)
-    return old_s, old_t
+    return old_s, r, old_t
+
+
+def _egcd(a, b):
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = _egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
 
 
 def _mod_inverse(k, prime):
     k = k % prime
     if k < 0:
-        _, _, r = egcd(prime, -k)
+        # _, _, r = _egcd(prime, -k)
+        _, _, r = _extended_gcd(prime, -k)
     else:
-        _, _, r = egcd(prime, k)
+        # _, _, r = _egcd(prime, k)
+        _, _, r = _extended_gcd(prime, k)
     return (prime + r) % prime
-
-
-def egcd(a, b):
-    if a == 0:
-        return (b, 0, 1)
-    else:
-        g, y, x = egcd(b % a, a)
-        return (g, x - (b // a) * y, y)
 
 
 def _lagrange_interpolate(x, x_s, y_s, prime):
@@ -106,16 +111,32 @@ def _recover_secret(shares, prime=PRIME):
 
 
 # print(_extended_gcd(240, 46))
+# print(_egcd(240, 46))
 
 # poly = [94, 166, 1234]
 # poly = [1234, 166, 94]
 # prime = 1613
 
-SECRET, SHARES = make_random_shares(minimum=3, shares=6)
-print('secret and shares:', SECRET, SHARES)
-print('secret recovered from minimum subset of shares',
-      _recover_secret([SHARES[1], SHARES[3], SHARES[4]]))
-print('secret recovered from minimum subset of shares',
-      _recover_secret(SHARES[:3]))
-print('secret recovered from a different minimum subset of shares',
-      _recover_secret(SHARES[-3:]))
+# SECRET, SHARES = make_random_shares(minimum=3, shares=6)
+# print('secret and shares:', SECRET, SHARES)
+# print('secret recovered from minimum subset of shares',
+#       _recover_secret([SHARES[1], SHARES[3], SHARES[4]]))
+# print('secret recovered from minimum subset of shares',
+#       _recover_secret(SHARES[:3]))
+# print('secret recovered from a different minimum subset of shares',
+#       _recover_secret(SHARES[-3:]))
+
+# secret = bytearray.fromhex(
+#     "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08")
+# checksum = sha256(secret).digest()[:2]
+# combinedData = secret + checksum
+
+
+# print(binascii.hexlify(secret))
+# print(binascii.hexlify(checksum))
+# print(binascii.hexlify(combinedData))
+
+
+print(maths.g_add(0x53, 0xca))
+print(maths.g_subtract(0x53, 0xca))
+print(maths.g_multiply(0x53, 0xca))

@@ -70,11 +70,11 @@ def _egcd(a, b):
 def _mod_inverse(k, prime):
     k = k % prime
     if k < 0:
-        # _, _, r = _egcd(prime, -k)
-        _, _, r = _extended_gcd(prime, -k)
+        _, _, r = _egcd(prime, -k)
+        # _, _, r = _extended_gcd(prime, -k)
     else:
-        # _, _, r = _egcd(prime, k)
-        _, _, r = _extended_gcd(prime, k)
+        _, _, r = _egcd(prime, k)
+        # _, _, r = _extended_gcd(prime, k)
     return (prime + r) % prime
 
 
@@ -137,6 +137,21 @@ def _recover_secret(shares, prime=PRIME):
 # print(binascii.hexlify(combinedData))
 
 
-print(maths.g_add(0x53, 0xca))
-print(maths.g_subtract(0x53, 0xca))
-print(maths.g_multiply(0x53, 0xca))
+# print(maths.g_add(0x53, 0xca))
+# print(maths.g_subtract(0x53, 0xca))
+
+# 0xca 202
+# 0x53 83
+# 0x11b 283
+
+print(maths.g_multiply(84, 13, 0b101100011))
+print(maths.inverse(84, 0b101100011))
+
+b = 0b11001010  # x7 + x6 + x3 + x      202
+a = 0b1010010   # x6 + x4 + x + 1       82
+p = 0x11b       #                       283
+# # print(maths.g_multiply(x, y) % 0x11b)
+
+# print(maths.g_multiply(a, b))
+# print(maths.inverse(a, p))
+# print(maths.inverse(b, p))

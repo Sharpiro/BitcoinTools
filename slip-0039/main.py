@@ -11,6 +11,7 @@ import functools
 # from hashlib import sha256
 # import binascii
 import maths
+import math
 # import secrets
 
 # 12th Mersenne Prime
@@ -170,3 +171,20 @@ def _recover_secret(shares, prime=PRIME):
 
 temp = maths.dividePolynomials(425, 51)
 print(bin(temp[0]), bin(temp[1]))
+assert 0b1001 == temp[0]
+assert 0b10 == temp[1]
+
+temp = maths.dividePolynomials(355, 84)
+print(bin(temp[0]), bin(temp[1]))
+assert 0b100 == temp[0]
+assert 0b110011 == temp[1]
+
+# print(maths.getBitPosition(0b110101001, 0))
+# print(maths.getBitPosition(0b110101001, 1))
+# print(maths.getBitPosition(0b110101001, 2))
+# print(maths.getBitPosition(0b110101001, 3))
+# print(maths.getBitPosition(0b110101001, 4))
+# print(maths.getBitPosition(0b110101001, 5))
+# print(maths.getBitPosition(0b110101001, 6))
+# print(maths.getBitPosition(0b110101001, 7))
+# print(maths.getBitPosition(0b110101001, 8))

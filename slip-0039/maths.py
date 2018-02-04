@@ -1,3 +1,6 @@
+import math
+
+
 def g_add(a, b):
     return a ^ b
 
@@ -22,28 +25,45 @@ def g_multiply(a, b, prime=0x11b):
 
 
 def dividePolynomials(a, b):
-    quotient = 1
+    quotient = 0
     divisor = b
-    dividend = a
-    # for _ in range(0, 3):
-    # divisor <<= 3
-    dividend >>= 3
 
-    quotient <<= 1
-    dividend = dividend ^ divisor
+    # dividend = a
+    dividend = 1
+    divMax = math.ceil(math.log(a, 2))
 
-    quotient <<= 1
-    dividend <<= 1
+    # index = power
+    index = 1
+    power = math.floor(math.log(divisor, 2))
+    maxValue = 2**power
 
-    quotient <<= 1
-    dividend <<= 1
+    # power = math.ceil(math.log(divisor, 2))
+    # maxValue = 2**power
+    # while dividend >= maxValue:
+    #     dividend >>= 1
 
-    quotient += 1
-    dividend <<= 1
-    dividend += 1
-    dividend = dividend ^ divisor
+    # dividend = dividend ^ divisor
+
+    while index < divMax:
+        while dividend < maxValue:
+            bit = getBitAtPosition(a, divMax - index - 1)
+            dividend <<= 1
+            if index > power:
+                quotient <<= 1
+            if bit:
+                dividend += 1
+            index += 1
+            if index >= divMax:
+                break
+        if dividend >= maxValue:
+            dividend = dividend ^ divisor
+            quotient += 1
 
     return quotient, dividend
+
+
+def getBitAtPosition(number, position):
+    return (number >> position) & 1
 
 
 # def inverse(a, p):

@@ -24,42 +24,26 @@ def g_multiply(a, b, prime=0x11b):
     return p
 
 
-def dividePolynomials(a, b):
+def dividePolynomials(dividend, divisor):
     quotient = 0
-    divisor = b
+    remainder = 0
+    dividendIndex = 0
+    minDivisorPower = math.floor(math.log(divisor, 2))
+    minDivisorValue = 2**minDivisorPower
+    maxDividendPower = math.ceil(math.log(dividend + 1, 2))
 
-    # dividend = a
-    dividend = 1
-    divMax = math.ceil(math.log(a, 2))
-
-    # index = power
-    index = 1
-    power = math.floor(math.log(divisor, 2))
-    maxValue = 2**power
-
-    # power = math.ceil(math.log(divisor, 2))
-    # maxValue = 2**power
-    # while dividend >= maxValue:
-    #     dividend >>= 1
-
-    # dividend = dividend ^ divisor
-
-    while index < divMax:
-        while dividend < maxValue:
-            bit = getBitAtPosition(a, divMax - index - 1)
-            dividend <<= 1
-            if index > power:
-                quotient <<= 1
-            if bit:
-                dividend += 1
-            index += 1
-            if index >= divMax:
-                break
-        if dividend >= maxValue:
-            dividend = dividend ^ divisor
+    while dividendIndex < maxDividendPower:
+        while remainder < minDivisorValue and dividendIndex < maxDividendPower:
+            bit = getBitAtPosition(
+                dividend, maxDividendPower - dividendIndex - 1)
+            remainder = (remainder << 1) + 1 if bit else remainder << 1
+            quotient <<= 1
+            dividendIndex += 1
+        if remainder >= minDivisorValue:
+            remainder = remainder ^ divisor
             quotient += 1
 
-    return quotient, dividend
+    return quotient, remainder
 
 
 def getBitAtPosition(number, position):

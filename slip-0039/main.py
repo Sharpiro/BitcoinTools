@@ -169,15 +169,40 @@ def _recover_secret(shares, prime=PRIME):
 # print(maths.dividePolynomials(a, actual))
 
 
-temp = maths.dividePolynomials(425, 51)
-print(bin(temp[0]), bin(temp[1]))
-assert 0b1001 == temp[0]
-assert 0b10 == temp[1]
+result = maths.dividePolynomials(425, 51)
+assert 0b1001 == result[0]
+assert 0b10 == result[1]
+print(bin(result[0]), bin(result[1]))
 
-temp = maths.dividePolynomials(355, 84)
-print(bin(temp[0]), bin(temp[1]))
-assert 0b100 == temp[0]
-assert 0b110011 == temp[1]
+result = maths.dividePolynomials(355, 84)
+assert 0b100 == result[0]
+assert 0b110011 == result[1]
+print(bin(result[0]), bin(result[1]))
+
+result = maths.dividePolynomials(84, 51)
+assert 0b11 == result[0]
+assert 0b1 == result[1]
+print(bin(result[0]), bin(result[1]))
+
+result = maths.dividePolynomials(0x11b, 0b1010011)
+assert 0b101 == result[0]
+assert 0b100 == result[1]
+print(bin(result[0]), bin(result[1]))
+
+result = maths.dividePolynomials(0b1010011, 0b100)
+assert 0b10100 == result[0]
+assert 0b11 == result[1]
+print(bin(result[0]), bin(result[1]))
+
+result = maths.dividePolynomials(0b100, 0b11)
+print(bin(result[0]), bin(result[1]))
+assert 0b11 == result[0]
+assert 0b1 == result[1]
+
+result = maths.dividePolynomials(0b11, 0b1)
+print(bin(result[0]), bin(result[1]))
+assert 0b11 == result[0]
+assert 0b0 == result[1]
 
 # print(maths.getBitPosition(0b110101001, 0))
 # print(maths.getBitPosition(0b110101001, 1))

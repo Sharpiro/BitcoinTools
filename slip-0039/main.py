@@ -8,8 +8,8 @@
 # from __future__ import division
 import random
 import functools
-from hashlib import sha256
-import binascii
+# from hashlib import sha256
+# import binascii
 import maths
 # import secrets
 
@@ -62,9 +62,8 @@ def _extended_gcd(a, b):
 def _egcd(a, b):
     if a == 0:
         return (b, 0, 1)
-    else:
-        g, y, x = _egcd(b % a, a)
-        return (g, x - (b // a) * y, y)
+    g, y, x = _egcd(b % a, a)
+    return (g, x - (b // a) * y, y)
 
 
 def _mod_inverse(k, prime):
@@ -144,14 +143,30 @@ def _recover_secret(shares, prime=PRIME):
 # 0x53 83
 # 0x11b 283
 
-print(maths.g_multiply(84, 13, 0b101100011))
-print(maths.inverse(84, 0b101100011))
+# print(maths.g_multiply(84, 13, 0b101100011))
+# print(maths.inverse(84, 0b101100011))
 
-b = 0b11001010  # x7 + x6 + x3 + x      202
-a = 0b1010010   # x6 + x4 + x + 1       82
-p = 0x11b       #                       283
-# # print(maths.g_multiply(x, y) % 0x11b)
+# wikipedia
+# B = 0b11001010  # x7 + x6 + x3 + x      202
+# A = 0b1010011   # x6 + x4 + x + 1       83
+# P = 0x11b  # 283
+# inverse = _extended_gcd(A, P)
+# assert B == inverse
+# print(maths.g_multiply(inverse, A, P))
 
-# print(maths.g_multiply(a, b))
-# print(maths.inverse(a, p))
-# print(maths.inverse(b, p))
+# juan
+# p = 0b101100011  # 355   2^8 + 2^6 + 2^5 + 2^1 + 1
+# a = 0b1010100  # 84      2^6 + 2^4 + 2^2
+# expected = 0b110011 #51  2^5 + 2^4 + 2^1 + 1
+
+# print(maths.g_multiply(a, 4, p))
+# print(maths.g_multiply(4, expected, p))
+# b = 0b1101  # 13         2^3 + 2^2 + 2^0
+# print(maths.g_multiply(a, b, 0b101100011))
+# actual = maths.dividePolynomials(p, a)
+# print(actual)
+# print(maths.dividePolynomials(a, actual))
+
+
+temp = maths.dividePolynomials(425, 51)
+print(bin(temp[0]), bin(temp[1]))

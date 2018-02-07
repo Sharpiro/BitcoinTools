@@ -148,68 +148,12 @@ def _recover_secret(shares, prime=PRIME):
 # print(maths.inverse(84, 0b101100011))
 
 # wikipedia
-# B = 0b11001010  # x7 + x6 + x3 + x      202
-# A = 0b1010011   # x6 + x4 + x + 1       83
-# P = 0x11b  # 283
-# inverse = _extended_gcd(A, P)
-# assert B == inverse
-# print(maths.g_multiply(inverse, A, P))
+p = 0x11b  # 283
+a = 0b1010011   # x6 + x4 + x + 1       83
+b = 0b11001010  # x7 + x6 + x3 + x      202
+temp = _extended_gcd(p, a)
 
-# juan
+# # juan
 # p = 0b101100011  # 355   2^8 + 2^6 + 2^5 + 2^1 + 1
 # a = 0b1010100  # 84      2^6 + 2^4 + 2^2
-# expected = 0b110011 #51  2^5 + 2^4 + 2^1 + 1
-
-# print(maths.g_multiply(a, 4, p))
-# print(maths.g_multiply(4, expected, p))
-# b = 0b1101  # 13         2^3 + 2^2 + 2^0
-# print(maths.g_multiply(a, b, 0b101100011))
-# actual = maths.dividePolynomials(p, a)
-# print(actual)
-# print(maths.dividePolynomials(a, actual))
-
-
-result = maths.dividePolynomials(425, 51)
-assert 0b1001 == result[0]
-assert 0b10 == result[1]
-print(bin(result[0]), bin(result[1]))
-
-result = maths.dividePolynomials(355, 84)
-assert 0b100 == result[0]
-assert 0b110011 == result[1]
-print(bin(result[0]), bin(result[1]))
-
-result = maths.dividePolynomials(84, 51)
-assert 0b11 == result[0]
-assert 0b1 == result[1]
-print(bin(result[0]), bin(result[1]))
-
-result = maths.dividePolynomials(0x11b, 0b1010011)
-assert 0b101 == result[0]
-assert 0b100 == result[1]
-print(bin(result[0]), bin(result[1]))
-
-result = maths.dividePolynomials(0b1010011, 0b100)
-assert 0b10100 == result[0]
-assert 0b11 == result[1]
-print(bin(result[0]), bin(result[1]))
-
-result = maths.dividePolynomials(0b100, 0b11)
-print(bin(result[0]), bin(result[1]))
-assert 0b11 == result[0]
-assert 0b1 == result[1]
-
-result = maths.dividePolynomials(0b11, 0b1)
-print(bin(result[0]), bin(result[1]))
-assert 0b11 == result[0]
-assert 0b0 == result[1]
-
-# print(maths.getBitPosition(0b110101001, 0))
-# print(maths.getBitPosition(0b110101001, 1))
-# print(maths.getBitPosition(0b110101001, 2))
-# print(maths.getBitPosition(0b110101001, 3))
-# print(maths.getBitPosition(0b110101001, 4))
-# print(maths.getBitPosition(0b110101001, 5))
-# print(maths.getBitPosition(0b110101001, 6))
-# print(maths.getBitPosition(0b110101001, 7))
-# print(maths.getBitPosition(0b110101001, 8))
+# b = 0b1101  # 13             2^3+2^2+2^0

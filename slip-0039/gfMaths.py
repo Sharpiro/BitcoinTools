@@ -1,15 +1,15 @@
 import math
 
 
-def g_add(a, b):
+def add(a, b):
     return a ^ b
 
 
-def g_subtract(a, b):
+def subtract(a, b):
     return a ^ b
 
 
-def g_multiply(a, b, prime):
+def multiply(a, b, prime):
     p = 0
     while a > 0 and b > 0:
         if b & 1 == 1:
@@ -33,7 +33,7 @@ def dividePolynomials(dividend, divisor):
 
     while dividendIndex < maxDividendPower:
         while remainder < minDivisorValue and dividendIndex < maxDividendPower:
-            bit = getBitAtPosition(
+            bit = _getBitAtPosition(
                 dividend, maxDividendPower - dividendIndex - 1)
             remainder = (remainder << 1) + 1 if bit else remainder << 1
             quotient <<= 1
@@ -45,25 +45,25 @@ def dividePolynomials(dividend, divisor):
     return quotient, remainder
 
 
-def getBitAtPosition(number, position):
-    return (number >> position) & 1
-
-
-def modularMultInverse(a, p):
+def inverse(a, p):
     n = 2
     quotientAuxillary = [(None, 0), (None, 1)]
     remainder = a
     dividend = p
     divisor = a
+    newAux = 1
 
     while remainder != 1:
         quotient, remainder = dividePolynomials(dividend, divisor)
         twoOldAux = quotientAuxillary[n - 2][1]
         oneOldAux = quotientAuxillary[n - 1][1]
-        newAux = g_add(twoOldAux, g_multiply(oneOldAux, quotient, p))
+        newAux = add(twoOldAux, multiply(oneOldAux, quotient, p))
 
         quotientAuxillary.append((quotient, newAux))
         dividend = divisor
         divisor = remainder
         n += 1
     return newAux
+
+def _getBitAtPosition(number, position):
+    return (number >> position) & 1

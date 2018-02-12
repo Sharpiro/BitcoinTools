@@ -4,13 +4,13 @@ import maths
 b = 0b11001010  # x7 + x6 + x3 + x      202
 a = 0b1010011   # x6 + x4 + x + 1       83
 p = 0x11b  # 283
-mult = maths.g_multiply(a, b, p)
+mult = maths.multiply(a, b, p)
 print(mult)
 assert mult == 1
-inverse = maths.modularMultInverse(a, p)
+inverse = maths.inverse(a, p)
 print(inverse)
 assert inverse == b
-inverse = maths.modularMultInverse(b, p)
+inverse = maths.inverse(b, p)
 print(inverse)
 assert inverse == a
 
@@ -20,12 +20,16 @@ a = 0b1010100  # 84      2^6 + 2^4 + 2^2
 b = 0b1101  # 13             2^3+2^2+2^0
 # expected = 0b110011  # 51  2^5 + 2^4 + 2^1 + 1
 
-mult = maths.g_multiply(a, b, p)
+mult = maths.multiply(a, b, p)
 print(mult)
 assert mult == 1
-inverse = maths.modularMultInverse(a, p)
+inverse = maths.inverse(a, p)
 print(inverse)
 assert inverse == b
-inverse = maths.modularMultInverse(b, p)
+inverse = maths.inverse(b, p)
 print(inverse)
 assert inverse == a
+
+# misc
+print(maths.inverse(1, 0x11b))
+assert maths.inverse(1, 0x11b) == 1

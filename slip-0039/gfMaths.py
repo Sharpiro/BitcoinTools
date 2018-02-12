@@ -65,5 +65,12 @@ def inverse(a, p):
         n += 1
     return newAux
 
+def evaluatePolynomial(polynomial, x, prime):
+    result = 0
+    for i in range(len(polynomial) - 1, -1, -1):
+        mult = multiply(result, x, prime)
+        result = add(mult, polynomial[i])
+    return result
+
 def _getBitAtPosition(number, position):
     return (number >> position) & 1

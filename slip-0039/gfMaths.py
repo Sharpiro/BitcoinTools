@@ -1,5 +1,7 @@
 import math
 
+PRIME = 0x11b
+
 
 def add(a, b):
     return a ^ b
@@ -9,7 +11,7 @@ def subtract(a, b):
     return a ^ b
 
 
-def multiply(a, b, prime):
+def multiply(a, b, prime=PRIME):
     p = 0
     while a > 0 and b > 0:
         if b & 1 == 1:
@@ -45,7 +47,7 @@ def dividePolynomials(dividend, divisor):
     return quotient, remainder
 
 
-def inverse(a, p):
+def inverse(a, p=PRIME):
     n = 2
     quotientAuxillary = [(None, 0), (None, 1)]
     remainder = a
@@ -65,12 +67,6 @@ def inverse(a, p):
         n += 1
     return newAux
 
-def evaluatePolynomial(polynomial, x, prime):
-    result = 0
-    for i in range(len(polynomial) - 1, -1, -1):
-        mult = multiply(result, x, prime)
-        result = add(mult, polynomial[i])
-    return result
 
 def _getBitAtPosition(number, position):
     return (number >> position) & 1

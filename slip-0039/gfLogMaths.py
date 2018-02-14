@@ -15,21 +15,28 @@ def _newField(poly=0x11b, a=0x03):
     exp[511] = 0
     return exp, log
 
+def add(a, b):
+    return a ^ b
 
-def mul(a, b):
+
+def subtract(a, b):
+    return a ^ b
+
+
+def multiply(a, b):
     if a == 0 or b == 0:
         return 0
     return EXP[LOG[a] + LOG[b]]
 
 
-def inv(x):
+def inverse(x):
     if x == 0:
         return 0
     return EXP[255 - LOG[x]]
 
 
 def div(a, b):
-    return mul(a, inv(b))
+    return multiply(a, inverse(b))
 
 
 # init

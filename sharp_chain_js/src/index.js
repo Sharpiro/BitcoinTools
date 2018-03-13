@@ -1,144 +1,103 @@
 const crypto = require('crypto');
-const version = 0x01
+import { Block } from "./block"
 
-// button.onclick = () => {
-//     console.log("click me bro")
-// }
+const version = 0x01
+const difficulty = 0x02
 
 blockOneData.value = "firstBlock"
-blockOneVerifyButton.onclick = () => {
-    console.log("click block one verify")
-}
-blockOneMineButton.onclick = () => {
-    console.log("click block one mine")
-}
+blockOneNonceValue.innerText = "39887"
+blockOneHashValue.innerText = "00000b17aa201c938d244c2b8611af9a8bb23b9db5fa86aaa94a06260aee21cf"
 blockTwoData.value = "secondBlock"
-blockTwoVerifyButton.onclick = () => {
-    console.log("click block two verify")
-}
-blockTwoMineButton.onclick = () => {
-    console.log("click block two mine")
-}
-//create blocks
-var genesisBlock = createGenesisBlock()
-var res = mine(genesisBlock);
+blockTwoNonceValue.innerText = "80580"
+blockTwoHashValue.innerText = "00003ead43d4030ccfb9578aa8bbcd8f5937a99ff59d597842fd268f162cc939"
+
+var blockChain = {}
+var genesisBlock = Block.createGenesis()
+var res = genesisBlock.mine();
 genesisBlock.nonce = res.nonce
-genesisBlock.hash = res.hashResult
-// console.log(genesisBlock)
+genesisBlock.hash = res.blockHash
+blockChain[genesisBlock.hash] = genesisBlock
+var firstBlock = Block.create(blockOneData.value, difficulty, genesisBlock.hash)
+firstBlock.nonce = parseInt(blockOneNonceValue.innerText)
+firstBlock.hash = Buffer.from(blockOneHashValue.innerText, "hex")
+blockChain[firstBlock.hash] = firstBlock
+var secondBlock = Block.create(blockTwoData.value, difficulty, firstBlock.hash)
+secondBlock.nonce = parseInt(blockTwoNonceValue.innerText)
+secondBlock.hash = Buffer.from(blockTwoHashValue.innerText, "hex")
+blockChain[secondBlock.hash] = secondBlock
 
-// var data = Buffer.from("firstBlock", "utf8")
-// const firstBlock = createBlock(data, 2, genesisBlock.hash)
-// var res = mine(firstBlock);
-// firstBlock.nonce = res.nonce
-// firstBlock.hash = res.hashResult
-// console.log(firstBlock)
+console.log(blockChain)
 
-// var data = Buffer.from("secondBlock", "utf8")
-// const secondBlock = createBlock(data, 2, firstBlock.hash)
-// var res = mine(secondBlock);
-// secondBlock.nonce = res.nonce
-// secondBlock.hash = res.hashResult
-// console.log(secondBlock)
+blockOneData.oninput = (event) => {
+    updateFirstBlock()
+    updateSecondBlock()
+}
 
-// //verify blocks
-// var hasher = crypto.createHash('sha256')
-// var hashableData = getHashableBlockData(genesisBlock, genesisBlock.nonce)
-// var actualHashResult = hasher.update(hashableData).digest()
-// if (genesisBlock.hash.compare(actualHashResult)) {
-//     console.error("genesis block hash failed to verify")
-//     console.log(genesisBlock.hash)
-//     console.log(actualHashResult)
-// }
+blockOneVerifyButton.onclick = () => {
+    updateFirstBlock()
+}
 
-// var hasher = crypto.createHash('sha256')
-// var hashableData = getHashableBlockData(firstBlock, firstBlock.nonce)
-// var actualHashResult = hasher.update(hashableData).digest()
-// if (firstBlock.hash.compare(actualHashResult)) {
-//     console.error("first block hash failed to verify")
-//     console.log(firstBlock.hash)
-//     console.log(actualHashResult)
-// }
+blockOneMineButton.onclick = () => {
+    firstBlock = Block.create(blockOneData.value, difficulty, genesisBlock.hash)
+    const mineResult = firstBlock.mine()
+    firstBlock.nonce = mineResult.nonce
+    firstBlock.hash = mineResult.blockHash
+    blockOneNonceValue.innerText = mineResult.nonce
+    blockOneHashValue.innerText = mineResult.blockHash.toString("hex")
+    console.log(firstBlock)
 
-// var hasher = crypto.createHash('sha256')
-// var hashableData = getHashableBlockData(secondBlock, secondBlock.nonce)
-// var actualHashResult = hasher.update(hashableData).digest()
-// if (secondBlock.hash.compare(actualHashResult)) {
-//     console.error("second block hash failed to verify")
-//     console.log(secondBlock.hash)
-//     console.log(actualHashResult)
-// }
+    updateFirstBlock()
+    updateSecondBlock()
+}
 
-// console.log("done")
+blockTwoData.oninput = (event) => {
+    updateSecondBlock()
+}
 
-function verifyBlock(block) {
-    var hasher = crypto.createHash('sha256')
-    var hashableData = getHashableBlockData(block, block.nonce)
-    var actualHashResult = hasher.update(hashableData).digest()
-    if (block.hash.compare(actualHashResult)) {
-        console.error("second block hash failed to verify")
-        console.log(block.hash)
-        console.log(actualHashResult)
+blockTwoVerifyButton.onclick = () => {
+    updateSecondBlock()
+}
+
+blockTwoMineButton.onclick = () => {
+    secondBlock = Block.create(blockTwoData.value, difficulty, firstBlock.hash)
+    const mineResult = secondBlock.mine()
+    secondBlock.nonce = mineResult.nonce
+    secondBlock.hash = mineResult.blockHash
+    blockTwoNonceValue.innerText = mineResult.nonce
+    blockTwoHashValue.innerText = mineResult.blockHash.toString("hex")
+    console.log(secondBlock)
+
+    updateSecondBlock()
+}
+
+function updateFirstBlock() {
+    firstBlock = Block.create(blockOneData.value, difficulty, genesisBlock.hash)
+    firstBlock.nonce = parseInt(blockOneNonceValue.innerText)
+    const actualHash = firstBlock.getHash(firstBlock.nonce)
+    firstBlock.hash = actualHash
+    blockOneHashValue.innerText = actualHash.toString("hex")
+
+    if (!firstBlock.verify()) {
+        console.error("block hash failed to verify")
+        document.getElementById("firstBlock").classList.add("redBlock")
+    } else {
+        console.log("successfully verified block")
+        document.getElementById("firstBlock").classList.remove("redBlock")
     }
 }
 
+function updateSecondBlock() {
+    secondBlock = Block.create(blockTwoData.value, difficulty, firstBlock.hash)
+    secondBlock.nonce = parseInt(blockTwoNonceValue.innerText)
+    const actualHash = secondBlock.getHash(secondBlock.nonce)
+    secondBlock.hash = actualHash
+    blockTwoHashValue.innerText = actualHash.toString("hex")
 
-function createGenesisBlock() {
-    const block = {
-        version: version,
-        previousBlockHash: new Buffer(0),
-        data: Buffer.from("genesis", "utf8"),
-        timestamp: new Date().getDate(),
-        difficulty: 1
+    if (!secondBlock.verify()) {
+        console.error("block hash failed to verify")
+        document.getElementById("secondBlock").classList.add("redBlock")
+    } else {
+        console.log("successfully verified block")
+        document.getElementById("secondBlock").classList.remove("redBlock")
     }
-    return block
-}
-
-function createBlock(data, difficulty, previousHash) {
-    const block = {
-        version: version,
-        previousBlockHash: previousHash,
-        data: data,
-        timestamp: new Date().getDate(),
-        difficulty: difficulty,
-    }
-    return block
-}
-
-function getBytes32(number) {
-    const buffer = new Buffer(4)
-    buffer.writeInt32LE(number)
-    return buffer
-}
-
-function getHashableBlockData(block, nonce) {
-    const versionBuffer = getBytes32(block.version)
-    const timestampBuffer = getBytes32(block.timestamp)
-    const difficultyBuffer = getBytes32(block.difficulty)
-    const nonceBuffer = getBytes32(nonce)
-    const combinedBuffer = Buffer.concat(
-        [
-            versionBuffer,
-            block.previousBlockHash,
-            block.data,
-            timestampBuffer,
-            difficultyBuffer,
-            nonceBuffer
-        ]
-    )
-    return combinedBuffer
-}
-
-function mine(block) {
-    for (let nonce = 0; nonce < 1000000; nonce++) {
-        const hasher = crypto.createHash('sha256')
-        const hashableData = getHashableBlockData(block, nonce)
-        const hashResult = hasher.update(hashableData).digest()
-        for (let j = 0; j < block.difficulty; j++) {
-            if (hashResult[j] != 0) break
-            if (j == block.difficulty - 1) {
-                return { nonce, hashResult }
-            }
-        }
-    }
-    return -1
 }

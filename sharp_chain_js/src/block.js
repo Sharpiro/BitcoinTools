@@ -8,7 +8,7 @@ export class Block {
         timestamp,
         difficulty
     }) {
-        // this.version = version;
+        this.version = version;
         this.previousBlockHash = previousBlockHash;
         this.data = data;
         // this.timestamp = timestamp;
@@ -30,14 +30,14 @@ export class Block {
     }
 
     getHash(nonce) {
-        // const versionBuffer = getBytes32(block.version)
+        const versionBuffer = Block.get32BitBuffer(this.version)
         // const timestampBuffer = getBytes32(block.timestamp)
         const hasher = crypto.createHash('sha256')
-        const difficultyBuffer = this.getBytes32(this.difficulty)
-        const nonceBuffer = this.getBytes32(nonce)
+        const difficultyBuffer = Block.get32BitBuffer(this.difficulty)
+        const nonceBuffer = Block.get32BitBuffer(nonce)
         const hashableData = Buffer.concat(
             [
-                // versionBuffer,
+                versionBuffer,
                 this.previousBlockHash,
                 this.data,
                 // timestampBuffer,
@@ -62,15 +62,9 @@ export class Block {
         return -1
     }
 
-    getBytes32(number) {
-        const buffer = new Buffer(4)
-        buffer.writeInt32LE(number)
-        return buffer
-    }
-
     static createGenesis() {
         const block = new Block({
-            // version: version,
+            version: this.version,
             previousBlockHash: new Buffer(0),
             data: Buffer.from("genesis", "utf8"),
             // timestamp: new Date().getDate(),
@@ -79,15 +73,22 @@ export class Block {
         return block
     }
 
-    static create(data, difficulty, previousHash) {
+    static create(version, data, difficulty, previousHash) {
+        const versionBuffer = Block.get32BitBuffer(version)
         const dataBuffer = Buffer.from(data, "utf8")
         const block = new Block({
-            // version: version,
+            version: version,
             previousBlockHash: previousHash,
             data: dataBuffer,
             // timestamp: new Date().getDate(),
             difficulty: difficulty,
         })
         return block
+    }
+
+    static get32BitBuffer(number) {
+        const buffer = new Buffer(4)
+        buffer.writeInt32LE(number)
+        return buffer
     }
 }

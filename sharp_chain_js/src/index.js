@@ -5,9 +5,12 @@ import css from '../styles/style.css';
 import toastrCss from '../node_modules/toastr/build/toastr.min.css';
 import materialJs from 'material-design-lite';
 import materialCss from '../node_modules/material-design-lite/material.min.css';
+import Worker from './workers/test.worker.js';
+import MiningWorker from "./workers/miner.worker"
 
 const version = 0x01
 const difficulty = 0x02
+var worker
 
 blockOneData.value = "firstBlock"
 blockOneNonceValue.innerText = "89748"
@@ -33,6 +36,7 @@ blockChain[secondBlock.hash] = secondBlock
 
 // console.log(blockChain)
 
+
 blockOneData.oninput = () => {
     updateFirstBlock()
     verifyFirstBlock()
@@ -48,16 +52,25 @@ blockOneVerifyButton.onclick = () => {
     }
 }
 
+// onMiningCompleted = (event) => {
+//     console.log(event)
+// }
+
 blockOneMineButton.onclick = () => {
     firstBlock = Block.create(version, blockOneData.value, difficulty, genesisBlock.hash)
-    const mineResult = firstBlock.mine()
-    firstBlock.nonce = mineResult.nonce
-    firstBlock.hash = mineResult.blockHash
-    blockOneNonceValue.innerText = mineResult.nonce
-    blockOneHashValue.innerText = mineResult.blockHash.toString("hex")
-    verifyFirstBlock()
-    verifySecondBlock()
-    console.log(firstBlock)
+    var minerWorker = new MiningWorker()
+    minerWorker.postMessage(firstBlock);
+    minerWorker.onmessage = (event) => {
+        console.log(event)
+        const mineResult = event.data
+        const bufferedHash = new Buffer(mineResult.blockHash)
+        firstBlock.nonce = mineResult.nonce
+        firstBlock.hash = bufferedHash
+        blockOneNonceValue.innerText = mineResult.nonce
+        blockOneHashValue.innerText = bufferedHash.toString("hex")
+        verifyFirstBlock()
+        verifySecondBlock()
+    }
 }
 
 blockTwoData.oninput = (event) => {
@@ -75,13 +88,20 @@ blockTwoVerifyButton.onclick = () => {
 
 blockTwoMineButton.onclick = () => {
     secondBlock = Block.create(version, blockTwoData.value, difficulty, firstBlock.hash)
-    const mineResult = secondBlock.mine()
-    secondBlock.nonce = mineResult.nonce
-    secondBlock.hash = mineResult.blockHash
-    blockTwoNonceValue.innerText = mineResult.nonce
-    blockTwoHashValue.innerText = mineResult.blockHash.toString("hex")
-    verifySecondBlock()
-    console.log(secondBlock)
+
+    var minerWorker = new MiningWorker()
+    minerWorker.postMessage(secondBlock);
+    minerWorker.onmessage = (event) => {
+        console.log(event)
+        const mineResult = event.data
+        const bufferedHash = new Buffer(mineResult.blockHash)
+        secondBlock.nonce = mineResult.nonce
+        secondBlock.hash = bufferedHash
+        blockTwoNonceValue.innerText = mineResult.nonce
+        blockTwoHashValue.innerText = bufferedHash.toString("hex")
+        verifyFirstBlock()
+        verifySecondBlock()
+    }
 }
 
 function updateFirstBlock() {
@@ -116,4 +136,16 @@ function verifySecondBlock() {
     }
     document.getElementById("secondBlock").classList.remove("redBlock")
     return true
+}
+startWorkerButton.onclick = () => {
+    worker = new Worker();
+    worker.onmessage = function (event) {
+        document.getElementById("result").innerHTML = event.data;
+        // console.log(event)
+    }
+}
+
+stopWorkerButton.onclick = () => {
+    worker.terminate();
+    worker = undefined;
 }

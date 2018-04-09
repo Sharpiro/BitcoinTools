@@ -6,4 +6,7 @@ function timedCount() {
     setTimeout(timedCount, 1000)
 }
 
-timedCount()
+onmessage = (event) => {
+    console.log(event)
+    // postMessage()
+}

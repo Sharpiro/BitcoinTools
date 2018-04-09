@@ -1,4 +1,6 @@
-const crypto = require('crypto');
+// const crypto = require('crypto');
+import { Buffer } from 'buffer';
+import * as crypto from "./crypto"
 
 export class Block {
     version: number
@@ -12,7 +14,6 @@ export class Block {
     }
 
     verify() {
-        var hasher = crypto.createHash('sha256')
         var blockHash = this.getHash(this.nonce)
         for (let j = 0; j < this.difficulty; j++) {
             if (blockHash[j] != 0) {
@@ -25,10 +26,10 @@ export class Block {
         return false
     }
 
-    getHash(nonce) {
+    getHash(nonce): Buffer {
         const versionBuffer = Block.get32BitBuffer(this.version)
         // const timestampBuffer = getBytes32(block.timestamp)
-        const hasher = crypto.createHash('sha256')
+        // const hasher = crypto.createHash('sha256')
         const difficultyBuffer = Block.get32BitBuffer(this.difficulty)
         const nonceBuffer = Block.get32BitBuffer(nonce)
         const hashableData = Buffer.concat(
@@ -41,7 +42,8 @@ export class Block {
                 nonceBuffer
             ]
         )
-        const blockHash = hasher.update(hashableData).digest()
+        // const blockHash = hasher.update(hashableData).digest()
+        const blockHash = crypto.sha256(hashableData)
         return blockHash
     }
 

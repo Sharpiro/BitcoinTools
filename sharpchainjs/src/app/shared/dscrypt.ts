@@ -1,3 +1,5 @@
+import {Buffer} from 'buffer';
+
 function evaluate(source) {
     var stack = []
     var command = ""

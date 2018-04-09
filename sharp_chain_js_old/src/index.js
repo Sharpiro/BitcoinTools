@@ -10,7 +10,7 @@ import MiningWorker from "./workers/miner.worker"
 
 const version = 0x01
 const difficulty = 0x02
-var worker
+var worker = new Worker()
 
 blockOneData.value = "firstBlock"
 blockOneNonceValue.innerText = "89748"
@@ -137,12 +137,18 @@ function verifySecondBlock() {
     document.getElementById("secondBlock").classList.remove("redBlock")
     return true
 }
+
 startWorkerButton.onclick = () => {
-    worker = new Worker();
+
     worker.onmessage = function (event) {
         document.getElementById("result").innerHTML = event.data;
         // console.log(event)
     }
+    var message = {
+        name: "start",
+        data: 123
+    }
+    worker.postMessage(message)
 }
 
 stopWorkerButton.onclick = () => {

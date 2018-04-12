@@ -1,6 +1,6 @@
 // const crypto = require('crypto');
 import { Buffer } from 'buffer';
-import * as crypto from "./crypto"
+import * as crypto from "./crypto_functions"
 
 export class Block {
     version: number

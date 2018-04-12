@@ -13,13 +13,14 @@ export class AppComponent implements OnInit {
 
   constructor(private webWorkerService: WebWorkerService) { }
 
-  async ngOnInit() {
-    const sha = crypto.sha256(Buffer.from("data"))
-    console.log(sha);
-    const result = await this.webWorkerService.run(this.someCPUHeavyFunction, { data: 12 });
+  ngOnInit() {
+    console.log("app componenet reloaded");
+    // const sha = crypto.sha256(Buffer.from("data"))
+    // console.log(sha);
+    // const result = await this.webWorkerService.run(this.someCPUHeavyFunction, { data: 12 });
     // const promise = this.webWorkerService.run(this.otherFunc, [1, 2]);
     // promise.then(result => console.log(result));
-    console.log(result)
+    // console.log(result)
   }
 
   otherFunc(inputOne: Array<number>): number {
@@ -34,5 +35,9 @@ export class AppComponent implements OnInit {
       j = i
     }
     return `j.toString()`
+  }
+
+  onClick(event) {
+    console.log(event);
   }
 }

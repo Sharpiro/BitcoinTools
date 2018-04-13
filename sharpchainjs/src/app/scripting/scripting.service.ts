@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Buffer } from 'buffer';
-import "../shared/extensions"
+import { Stack } from '../shared/stack';
 
 @Injectable()
 export class ScriptingService {
-  private stack: any[]
+  private stack: Stack
 
   evaluate(source: string): any {
-    this.stack = []
+    this.stack = new Stack()
     var command = ""
     for (let i = 0; i < source.length; i++) {
       if (source[i] != " " && source[i] != "\n") {
@@ -35,8 +35,9 @@ export class ScriptingService {
       }
       command = ""
     }
-    if (this.stack.length != 1) throw "after evaluation, more than 1 values were left on the stack"
-    return this.stack[0]
+    const result = this.stack.pop()
+    if (this.stack.length != 0) throw "after evaluation, more than 1 values were left on the stack"
+    return result
   }
 
   add() {

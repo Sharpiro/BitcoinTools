@@ -19,7 +19,7 @@ export function ripemd160(buffer: Buffer): Buffer {
 }
 
 export function getRandomBytes(length: number): Buffer {
-    const wordArray = (<any>cryptojs.lib.WordArray).random(length);
+    const wordArray = (<any>cryptojs.lib.WordArray).random(length)
     const base64 = wordArray.toString(cryptojs.enc.Base64)
     return Buffer.from(base64, "base64")
 }

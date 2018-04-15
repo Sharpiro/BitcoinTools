@@ -15,7 +15,7 @@ export class ScriptingComponent implements OnInit {
   constructor(private scriptingService: ScriptingService) { }
 
   ngOnInit() {
-    console.log("scripting componenet reloaded");
+    // console.log("scripting componenet reloaded");
   }
 
   evaluate() {

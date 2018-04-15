@@ -8,12 +8,14 @@ import { MatButtonModule, MatToolbarModule, MatInputModule } from '@angular/mate
 import { ScriptingComponent } from './scripting/scripting.component';
 import { ScriptingService } from './scripting/scripting.service';
 import { FormsModule } from '@angular/forms';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    ScriptingComponent
+    ScriptingComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

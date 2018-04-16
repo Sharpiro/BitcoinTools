@@ -39,16 +39,6 @@ export class AppComponent implements OnInit {
     // console.log(expectedHex);
     // console.log(actualHex);
     // console.log(expectedHex.toLowerCase() == actualHex);
-
-    const bitcoinAddress = "5Kd3NBUAdUnhyzenEwVLy9pBKxSwXvE9FMPyR4UKZvpe6E3AgLr"
-    const bitcoinAddressBuffer = base58Check.getBytes(bitcoinAddress)
-    const actualHex = bitcoinAddressBuffer.toString("hex")
-    console.log(actualHex)
-    const reEncoded = base58Check.getString(bitcoinAddressBuffer)
-    console.log(bitcoinAddress)
-    console.log(reEncoded)
-    console.log(reEncoded == bitcoinAddress);
-
   }
 
   isActive(event) {

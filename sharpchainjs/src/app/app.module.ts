@@ -9,13 +9,15 @@ import { ScriptingComponent } from './scripting/scripting.component';
 import { ScriptingService } from './scripting/scripting.service';
 import { FormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { Base58checkComponent } from './base58check/base58check.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     ScriptingComponent,
-    DashboardComponent
+    DashboardComponent,
+    Base58checkComponent
   ],
   imports: [
     BrowserModule,

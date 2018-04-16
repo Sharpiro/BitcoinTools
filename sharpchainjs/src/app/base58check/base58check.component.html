@@ -1,0 +1,14 @@
+<div class="row">
+  <mat-form-field style="width:35%;">
+    <input matInput placeholder="base58" [(ngModel)]="input" (input)="onChange($event)">
+  </mat-form-field>
+</div>
+<div>
+  <button mat-raised-button (click)="onSubmit($event)">Submit</button>
+</div>
+
+<div class="row">
+  <mat-form-field style="width:35%;">
+    <input matInput placeholder="hex" [value]="hex" readonly>
+  </mat-form-field>
+</div>

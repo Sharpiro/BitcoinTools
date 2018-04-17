@@ -31,7 +31,28 @@ export function getString(buffer: Buffer): string {
 }
 
 export function getBytes(base58String: string): Buffer {
-    const subString = base58String.slice()
+    const allBytes = getBytesInternal(base58String)
+    if (!validateChecksum(allBytes)) throw "invalid buffer checksum"
+    const finalBytes = allBytes.slice(0, -checksumLength)
+
+    return finalBytes
+}
+
+export function isValidBase64(base58String: string): boolean {
+    const allBytes = getBytesInternal(base58String)
+    const isValid = validateChecksum(allBytes)
+    return isValid
+}
+
+export function getDataType(base58String: string): string {
+    let type = prefixMap[base58String[0]]
+    if (!type) {
+        type = prefixMap[base58String.slice(0, 4)]
+    }
+    return type
+}
+
+function getBytesInternal(base58String: string): Buffer {
     const allDatabuffer = base58.getBytes(base58String)
 
     const preList: number[] = []
@@ -40,9 +61,6 @@ export function getBytes(base58String: string): Buffer {
     }
     const preBuffer = Buffer.from(preList)
     let finalBuffer = Buffer.concat([preBuffer, allDatabuffer])
-    if (!validateChecksum(finalBuffer)) throw "invalid buffer checksum"
-    finalBuffer = finalBuffer.slice(0, -checksumLength)
-
     return finalBuffer
 }
 

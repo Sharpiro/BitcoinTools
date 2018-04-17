@@ -1,4 +1,3 @@
-// import * as base58 from "./base58"
 import * as base58Check from "./base58Check"
 import * as crypto from "./crypto_functions"
 import { Buffer } from "buffer"

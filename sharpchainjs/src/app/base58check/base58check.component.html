@@ -1,11 +1,14 @@
 <div class="row">
   <mat-form-field style="width:35%;">
-    <input matInput placeholder="base58" [(ngModel)]="input" (input)="onChange($event)">
+    <input matInput placeholder="base58" [(ngModel)]="input" (input)="onInput($event)" />
   </mat-form-field>
+  <div *ngFor="let x of feedback">
+    {{x}}
+  </div>
 </div>
-<div>
+<!-- <div>
   <button mat-raised-button (click)="onSubmit($event)">Submit</button>
-</div>
+</div> -->
 
 <div class="row">
   <mat-form-field style="width:35%;">

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Buffer } from 'buffer';
 import { Stack } from '../shared/stack';
+import * as crypto from "../shared/crypto_functions"
 
 @Injectable()
 export class ScriptingService {
@@ -26,12 +27,24 @@ export class ScriptingService {
         case "op_equal":
           this.equal()
           break;
+        case "op_verify":
+          this.verify()
+          break;
+        case "op_equalverify":
+          this.equalVerify()
+          break;
         case "op_dup":
           this.duplicate()
+          break;
+        case "op_hash160":
+          this.hash160()
           break;
         default:
           this.stack.push(command)
           break;
+      }
+      for (var x of this.stack.array) {
+        console.log(x);
       }
       command = ""
     }
@@ -59,10 +72,30 @@ export class ScriptingService {
     this.stack.push(firstPop == secondPop)
   }
 
+  verify() {
+    if (this.stack.length < 1) throw "failed to do 'op_equal', invalid stack data"
+    const firstPop = this.stack.pop()
+    if (!firstPop) throw "script failed to verify"
+  }
+
+  equalVerify() {
+    this.equal()
+    this.verify()
+  }
+
   duplicate() {
     if (this.stack.length < 1) throw "failed to do 'op_dup', invalid stack data"
     const peek = this.stack.peek()
     this.stack.push(peek)
+  }
+
+  hash160() {
+    if (this.stack.length < 1) throw "failed to do 'op_dup', invalid stack data"
+    const popped = this.stack.pop()
+    const buffer = Buffer.from(popped, "hex")
+    const sha = crypto.sha256(buffer)
+    const hash = crypto.ripemd160(sha).toString("hex")
+    this.stack.push(hash)
   }
 
   popNumbers(amount: number): number[] {

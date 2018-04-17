@@ -2,7 +2,11 @@ export class Stack {
     private data = []
 
     get length(): number {
-        return this.data.length;
+        return this.data.length
+    }
+
+    get array(): any[] {
+        return this.data
     }
 
     push(val: any): void {

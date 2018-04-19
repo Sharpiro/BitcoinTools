@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import * as curves from "../shared/curve"
+import { Buffer } from "buffer"
+import * as curves from "../shared/curves"
+import * as crypto from "../shared/crypto_functions"
 
 @Component({
   selector: 'app-dashboard',
@@ -11,14 +13,29 @@ export class DashboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    var messageHash = Buffer.from("f52c44a5fa08dd6074492a1a3a1e4004e7013bed43c75031a7f138b3cacfad20", "hex")
-    const privateKey = Buffer.from("3bbcb81fd08cffda86f2b1fec3955004500be04e30dfa636a70b85b84273ff83")
+    // const messageHash = Buffer.from("f52c44a5fa08dd6074492a1a3a1e4004e7013bed43c75031a7f138b3cacfad20", "hex")
 
-    const publicKey = curves.getPublicKey(privateKey)
-    // const publicKey = Buffer.from("046be401150024a7974a56ea12c0ea3e71f987ea6b76fd9b21bdbe7a924f6f7f797b45ab71487eadc9b42adf8d064139e84c05a57ad6baaf11aa1b58fdf7c65fcb", "hex")
+    for (let i = 0; i < 100; i++) {
+      const messageHash = crypto.getRandomBytes(32)
+      const privateKey = crypto.getRandomBytes(32)
+      // const privateKeyHex = privateKey.toString("hex")
+      // const privateKey = Buffer.from("420d0882bbeac75e9e03c1a3c868c037ac87e1c334741b0d31da6c59bf55a893","hex")
+      // const privateKey = Buffer.from("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725", "hex")
+      const expectedFullPublicKey = curves.getFullPublicKey(privateKey)
+      const compressedPublicKey = curves.getCompressedPublicKey(privateKey)
+      const actualFullPublicKey = curves.getFullPublicKeyFromCompressed(compressedPublicKey)
 
-    const sig = curves.sign(messageHash, privateKey)
-    const result = curves.verify(messageHash, sig, publicKey)
-    console.log(result);
+      // console.log(compressedPublicKey.toString("hex"));
+      // console.log(expectedFullPublicKey.toString("hex"));
+      // console.log(actualFullPublicKey.toString("hex"));
+      const isValid = Buffer.compare(expectedFullPublicKey, actualFullPublicKey) == 0
+      if (!isValid) {
+        throw "invalid public key, very bad"
+      }
+      // console.log(isValid)
+      const signatue = curves.sign(messageHash, privateKey)
+      const result = curves.verify(messageHash, signatue, actualFullPublicKey)
+      console.log(result);
+    }
   }
 }

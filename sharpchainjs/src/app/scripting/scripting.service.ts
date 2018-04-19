@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Buffer } from 'buffer';
 import { Stack } from '../shared/stack';
 import * as crypto from "../shared/crypto_functions"
+import * as curves from "../shared/curves"
 
 @Injectable()
 export class ScriptingService {

@@ -1,5 +1,6 @@
 declare module "elliptic" {
-    import { BN } from "bn"
+    import { BN } from "bn.js"
+    import { Buffer } from "buffer"
 
     class ec {
         curve: ShortCurve
@@ -18,13 +19,15 @@ declare module "elliptic" {
 
     interface ShortCurve {
         g: Point
+        p: BN
+        pointFromX(x: any, y: any): Point
     }
     interface Point {
-        x: any
-        y: any
+        x: BN
+        y: BN
         type: string
         inf: boolean
-        mul(k: any): Point
+        mul(k: BN): Point
         eq(other: Point): boolean
         encode(): number[]
         encode(encoding: string): string

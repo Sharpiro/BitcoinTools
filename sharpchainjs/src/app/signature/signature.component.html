@@ -1,0 +1,29 @@
+<div class="row">
+  <mat-form-field class="form-width">
+    <input matInput placeholder="private key" [(ngModel)]="privateKey" />
+  </mat-form-field>
+  <button mat-button (click)="onGenerateClick()">Generate</button>
+</div>
+
+<div class="row">
+  <mat-form-field class="form-width">
+    <input matInput placeholder="public key compressed" [(ngModel)]="publicKey">
+  </mat-form-field>
+</div>
+
+<div class="row">
+  <mat-form-field class="form-width">
+    <input matInput placeholder="data" [(ngModel)]="data">
+  </mat-form-field>
+</div>
+
+<div class="row">
+  <button mat-button (click)="onCreateSignatureClick()">Create Signature</button>
+  <button mat-button (click)="onVerifySignatureClick()">Verify Signature</button>
+</div>
+
+<div class="row">
+  <mat-form-field class="form-width">
+    <input matInput placeholder="signature" [(ngModel)]="signature" >
+  </mat-form-field>
+</div>

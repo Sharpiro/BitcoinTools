@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as base58check from "../shared/base58Check"
 import { FormControl, Validators } from '@angular/forms';
+import { Buffer } from "buffer"
 
 @Component({
   selector: 'app-base58check',

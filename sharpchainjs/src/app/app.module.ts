@@ -10,6 +10,7 @@ import { ScriptingService } from './scripting/scripting.service';
 import { FormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { Base58checkComponent } from './base58check/base58check.component';
+import { SignatureComponent } from './signature/signature.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { Base58checkComponent } from './base58check/base58check.component';
     AppComponent,
     ScriptingComponent,
     DashboardComponent,
-    Base58checkComponent
+    Base58checkComponent,
+    SignatureComponent
   ],
   imports: [
     BrowserModule,

@@ -113,12 +113,14 @@ export class ScriptingService {
   }
 
   checkSignature() {
-    if (this.stack.length < 2) throw "failed to do 'op_dup', invalid stack data"
+    if (this.stack.length < 3) throw "failed to do 'op_checksig', invalid stack data"
     const publicKey = this.stack.pop()
-    const hashSig = this.stack.pop()
+    const hashSignature = this.stack.pop()
+    const hash = this.stack.pop()
     const publicKeyBuffer = Buffer.from(publicKey, "hex")
-    const hashSigBuffer = Buffer.from(hashSig, "hex")
-    const result = curves.verifyCombined(hashSigBuffer, publicKeyBuffer)
+    const hashSigBuffer = Buffer.from(hashSignature, "hex")
+    const hashBuffer = Buffer.from(hash, "hex")
+    const result = curves.verify(hashBuffer, hashSigBuffer, publicKeyBuffer)
     this.stack.push(result)
   }
 

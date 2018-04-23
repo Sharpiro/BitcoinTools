@@ -1,18 +1,17 @@
 import * as crypto from "./crypto_functions"
-import * as bigInt from "big-integer"
 import { Buffer } from "buffer"
+import { BN } from "bn.js"
 
 const codeString = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 
 export function getCharArray(buffer: Buffer): string[] {
-    const xHex = buffer.toString("hex")
-    var bigX = bigInt(xHex, 16)
+    let bigX = new BN(buffer)
     let codeArray: string[] = []
 
-    while (bigX.greater(0)) {
-        var result = bigX.divmod(58)
-        bigX = result.quotient
-        codeArray.push(codeString[result.remainder.toJSNumber()])
+    while (bigX.gt(new BN())) {
+        var result = bigX.divmod(new BN(58))
+        bigX = result.div
+        codeArray.push(codeString[result.mod.toNumber()])
     }
     return codeArray.reverse()
 }
@@ -24,12 +23,12 @@ export function getString(buffer: Buffer): string {
 }
 
 export function getBytes(base58String: string): Buffer {
-    var bigX = bigInt()
+     let bigX = new BN()
     for (let i = 0; i < base58String.length; i++) {
         const remainder = codeString.indexOf(base58String[i])
-        bigX = bigX.multiply(58).add(remainder)
+        bigX = bigX.mul(new BN(58)).add(new BN(remainder))
     }
 
-    const dataBuffer = Buffer.from(bigX.toArray(256).value)
+    const dataBuffer = bigX.toArrayLike(Buffer)
     return dataBuffer
 }

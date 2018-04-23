@@ -1,17 +1,14 @@
 <div class="row">
   <mat-form-field style="width:35%;">
-    <input matInput placeholder="base58" [(ngModel)]="input" (input)="onInput($event)" />
+    <input matInput placeholder="base58" [(ngModel)]="base58Data" (input)="onBase58Input($event)" />
   </mat-form-field>
   <div *ngFor="let x of feedback">
     {{x}}
   </div>
 </div>
-<!-- <div>
-  <button mat-raised-button (click)="onSubmit($event)">Submit</button>
-</div> -->
 
 <div class="row">
   <mat-form-field style="width:35%;">
-    <input matInput placeholder="hex" [value]="hex" readonly>
+    <input matInput placeholder="hex" [(ngModel)]="hexData" (input)="onHexInput($event)">
   </mat-form-field>
 </div>

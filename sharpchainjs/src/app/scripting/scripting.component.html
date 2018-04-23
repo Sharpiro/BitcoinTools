@@ -1,10 +1,11 @@
 <div class="row">
   <form>
-    <!-- <mat-form-field class="example-full-width">
-      <input [ngModelOptions]="{standalone: true}" matInput placeholder="Script" [(ngModel)]="source">
-    </mat-form-field> -->
     <mat-form-field class="example-full-width">
-      <textarea matInput placeholder="Autosize textarea" [(ngModel)]="source" matTextareaAutosize matAutosizeMinRows="10" matAutosizeMaxRows="50"
+      <textarea matInput placeholder="scriptSig" [(ngModel)]="scriptSig" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="10"
+        [ngModelOptions]="{standalone: true}"></textarea>
+    </mat-form-field>
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="scriptPubKey" [(ngModel)]="scriptPubKey" matTextareaAutosize matAutosizeMinRows="5" matAutosizeMaxRows="10"
         [ngModelOptions]="{standalone: true}"></textarea>
     </mat-form-field>
     <div>
@@ -13,11 +14,6 @@
   </form>
 </div>
 <div class="row">
-  <div>
-    <!-- <mat-form-field>
-    </mat-form-field> -->
-    <input matInput placeholder="Executed Script" [value]="executedScript" readonly>
-  </div>
   <div>
     <input matInput placeholder="Result" [value]="result" readonly>
   </div>

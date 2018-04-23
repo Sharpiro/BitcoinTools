@@ -13,8 +13,15 @@ declare module "elliptic" {
     interface KeyPair {
         getPublic(): Point
         getPrivate(): BN
-        sign(messageHash: Buffer | any[]): any
+        sign(messageHash: Buffer | any[]): Signature
         verify(messageHash: any, derSign: any): boolean
+    }
+
+    interface Signature {
+        r: BN
+        s: BN
+        recoveryParam: number
+        toDER(): number[]
     }
 
     interface ShortCurve {

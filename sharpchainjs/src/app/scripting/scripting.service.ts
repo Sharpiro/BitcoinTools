@@ -8,13 +8,21 @@ import * as curves from "../shared/curves"
 export class ScriptingService {
   private stack: Stack
 
-  evaluate(source: string): any {
+  evaluate(scriptSig: string, scriptPubKey: string): any {
     this.stack = new Stack()
+    this.evaluateScript(scriptSig)
+    this.evaluateScript(scriptPubKey)
+
+    const result = this.stack.pop()
+    return result
+  }
+
+  private evaluateScript(script: string): void {
     var command = ""
-    for (let i = 0; i < source.length; i++) {
-      if (source[i] != " " && source[i] != "\n") {
-        command += source[i]
-        if (i + 1 != source.length)
+    for (let i = 0; i < script.length; i++) {
+      if (script[i] != " " && script[i] != "\n") {
+        command += script[i]
+        if (i + 1 != script.length)
           continue
       }
 
@@ -40,18 +48,23 @@ export class ScriptingService {
         case "op_hash160":
           this.hash160()
           break;
+        case "op_checksig":
+          this.checkSignature()
+          break;
         default:
           this.stack.push(command)
           break;
       }
-      for (var x of this.stack.array) {
-        console.log(x);
-      }
+
       command = ""
     }
-    const result = this.stack.pop()
-    if (this.stack.length != 0) throw "after evaluation, more than 1 values were left on the stack"
-    return result
+    // for (var x of this.stack.array) {
+    //   console.log(x);
+    // }
+    // const result = this.stack.pop()
+
+    // if (this.stack.length != 0) throw "after evaluation, more than 1 values were left on the stack"
+    // return result
   }
 
   add() {
@@ -97,6 +110,16 @@ export class ScriptingService {
     const sha = crypto.sha256(buffer)
     const hash = crypto.ripemd160(sha).toString("hex")
     this.stack.push(hash)
+  }
+
+  checkSignature() {
+    if (this.stack.length < 2) throw "failed to do 'op_dup', invalid stack data"
+    const publicKey = this.stack.pop()
+    const hashSig = this.stack.pop()
+    const publicKeyBuffer = Buffer.from(publicKey, "hex")
+    const hashSigBuffer = Buffer.from(hashSig, "hex")
+    const result = curves.verifyCombined(hashSigBuffer, publicKeyBuffer)
+    this.stack.push(result)
   }
 
   popNumbers(amount: number): number[] {

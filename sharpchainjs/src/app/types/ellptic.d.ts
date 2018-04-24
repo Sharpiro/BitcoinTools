@@ -3,8 +3,9 @@ declare module "elliptic" {
     import { Buffer } from "buffer"
 
     class ec {
-        curve: ShortCurve
         constructor(curveType: string)
+        curve: ShortCurve
+        g: Point
         genKeyPair(): KeyPair
         keyFromPrivate(data: Buffer): KeyPair
         keyFromPublic(data: Buffer): KeyPair
@@ -27,7 +28,7 @@ declare module "elliptic" {
     interface ShortCurve {
         g: Point
         p: BN
-        pointFromX(x: any, y: any): Point
+        // pointFromX(xBuffer: Buffer, yIsOdd: boolean): Point
     }
     interface Point {
         x: BN
@@ -37,6 +38,7 @@ declare module "elliptic" {
         mul(k: BN): Point
         eq(other: Point): boolean
         encode(): number[]
-        encode(encoding: string): string
+        encode(encoding: "hex", compact?: boolean): string
+        encode(encoding: "array", compact?: boolean): number[]
     }
 }

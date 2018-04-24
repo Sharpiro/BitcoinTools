@@ -5,3 +5,8 @@
 .example-full-width {
     width: 100%;
 }
+
+.mat-button, .mat-raised-button{
+    background-color:#3f51b5;
+    color: whitesmoke;
+}

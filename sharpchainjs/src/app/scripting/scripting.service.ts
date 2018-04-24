@@ -67,43 +67,43 @@ export class ScriptingService {
     // return result
   }
 
-  add() {
+  private add() {
     if (this.stack.length < 2) throw "failed to do 'opp_add', invalid stack data"
     const popped = this.popNumbers(2)
     this.stack.push(popped[0] + popped[1])
   }
 
-  subtract() {
+  private subtract() {
     if (this.stack.length < 2) throw "failed to do 'op_sub', invalid stack data"
     const popped = this.popNumbers(2)
     this.stack.push(popped[1] - popped[0])
   }
 
-  equal() {
+  private equal() {
     if (this.stack.length < 2) throw "failed to do 'op_equal', invalid stack data"
     const firstPop = this.stack.pop()
     const secondPop = this.stack.pop()
     this.stack.push(firstPop == secondPop)
   }
 
-  verify() {
+  private verify() {
     if (this.stack.length < 1) throw "failed to do 'op_equal', invalid stack data"
     const firstPop = this.stack.pop()
     if (!firstPop) throw "script failed to verify"
   }
 
-  equalVerify() {
+  private equalVerify() {
     this.equal()
     this.verify()
   }
 
-  duplicate() {
+  private duplicate() {
     if (this.stack.length < 1) throw "failed to do 'op_dup', invalid stack data"
     const peek = this.stack.peek()
     this.stack.push(peek)
   }
 
-  hash160() {
+  private hash160() {
     if (this.stack.length < 1) throw "failed to do 'op_dup', invalid stack data"
     const popped = this.stack.pop()
     const buffer = Buffer.from(popped, "hex")
@@ -112,7 +112,7 @@ export class ScriptingService {
     this.stack.push(hash)
   }
 
-  checkSignature() {
+  private checkSignature() {
     if (this.stack.length < 3) throw "failed to do 'op_checksig', invalid stack data"
     const publicKey = this.stack.pop()
     const hashSignature = this.stack.pop()
@@ -124,7 +124,7 @@ export class ScriptingService {
     this.stack.push(result)
   }
 
-  popNumbers(amount: number): number[] {
+  private popNumbers(amount: number): number[] {
     const poppedList: number[] = []
     for (let i = 0; i < amount; i++) {
       const popped = this.stack.pop()

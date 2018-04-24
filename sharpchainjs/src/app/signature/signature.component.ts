@@ -18,7 +18,15 @@ export class SignatureComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  onPrivateKeyInput() {
+    if (!this.privateKey) {
+      this.publicKey = ""
+      return
+    }
+    const privateKeyBuffer = Buffer.from(this.privateKey, "hex")
+    this.publicKey = curves.getCompressedPublicKey(privateKeyBuffer).toString("hex")
   }
 
   onGenerateClick() {

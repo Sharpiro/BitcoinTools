@@ -13,26 +13,13 @@ export class DashboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    // const messageHash = Buffer.from("f52c44a5fa08dd6074492a1a3a1e4004e7013bed43c75031a7f138b3cacfad20", "hex")
+    const random = "0c1e24e5917779d297e14d45f14e1a1a"
+    const words = "army van defense carry jealous true garbage claim echo media make crunch"
+    const expectedSeed = "5b56c417303faa3fcba7e57400e120a0ca83ec5a4fc9ffba757fbe63fbd77a89a1a3be4c67196f57c39a88b76373733891bfaba16ed27a813ceed498804c0570"
 
-    for (let i = 0; i < 1; i++) {
-      const messageHash = crypto.getRandomBytes(20)
-      const privateKey = crypto.getRandomBytes(32)
-      // const privateKeyHex = privateKey.toString("hex")
-      // const privateKey = Buffer.from("420d0882bbeac75e9e03c1a3c868c037ac87e1c334741b0d31da6c59bf55a893", "hex")
-      // const privateKey = Buffer.from("18E14A7B6A307F426A94F8114701E7C8E774E7F9A47E2C2035DB29A206321725", "hex")
-      const compressedPublicKey = curves.getCompressedPublicKey(privateKey)
-      const combinedSig = curves.sign(messageHash, privateKey)
-      // console.log("combined_sig:", combinedSig.toString("hex"));
+    const actualSeed = crypto.pbkdf2(Buffer.from(words, "utf8"), Buffer.from("mnemonicSuperDuperSecret", "utf8"))
+    console.log(actualSeed.toString("hex"));
 
-      const combinedResult = curves.verify(messageHash, combinedSig, compressedPublicKey)
-      console.log("isvalid:", combinedResult);
-      const length = combinedSig.slice(20).length
-      if (!combinedResult) {
-        console.log(length);
-        throw "broke"
-      }
-    }
     console.log("done");
   }
 }

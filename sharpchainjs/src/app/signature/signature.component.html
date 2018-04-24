@@ -1,8 +1,8 @@
 <div class="row">
   <mat-form-field class="form-width">
-    <input matInput placeholder="private key" [(ngModel)]="privateKey" />
+    <input matInput placeholder="private key" [(ngModel)]="privateKey" (input)="onPrivateKeyInput()"/>
   </mat-form-field>
-  <button mat-button (click)="onGenerateClick()">Generate</button>
+  <button mat-raised-button (click)="onGenerateClick()">Generate</button>
 </div>
 
 <div class="row">
@@ -18,8 +18,8 @@
 </div>
 
 <div class="row">
-  <button mat-button (click)="onCreateSignatureClick()">Create Signature</button>
-  <button mat-button (click)="onVerifySignatureClick()">Verify Signature</button>
+  <button mat-raised-button (click)="onCreateSignatureClick()">Create Signature</button>
+  <button mat-raised-button (click)="onVerifySignatureClick()">Verify Signature</button>
 </div>
 
 <div class="row">

@@ -5,3 +5,8 @@
 .form-width {
     width: 50%;
 }
+
+.mat-button, .mat-raised-button{
+    background-color:#3f51b5;
+    color: whitesmoke;
+}

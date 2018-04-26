@@ -1,6 +1,6 @@
 import { Buffer } from 'buffer';
 import * as cryptojs from "crypto-js"
-import * as passwordHashing from 'pbkdf2'
+import * as pbkdf2Lib from 'pbkdf2'
 
 export async function sha256Async(buffer: Buffer): Promise<Buffer> {
     var arrayBuffer = await window.crypto.subtle.digest("SHA-256", buffer)
@@ -26,5 +26,5 @@ export function getRandomBytes(length: number): Buffer {
 }
 
 export function pbkdf2(password: Buffer, salt?: Buffer, iterations = 2048, outputSizeBytes = 64, hashAlg: "sha256" | "sha512" = "sha512"): Buffer {
-    return passwordHashing.pbkdf2Sync(password, salt, 2048, 64, 'sha512')
+    return pbkdf2Lib.pbkdf2Sync(password, salt, 2048, 64, 'sha512')
 }

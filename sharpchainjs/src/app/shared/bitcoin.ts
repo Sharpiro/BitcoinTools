@@ -4,10 +4,10 @@ import { Buffer } from "buffer"
 import { wordList } from "./bip39Words"
 
 /** Retruns a bitcoin address from a compressed public key */
-export function getBitcoinAddress(compressedPublicKey: Buffer): string {
+export function getBitcoinAddress(compressedPublicKey: Buffer, addressType: Buffer): string {
     let sha = crypto.sha256(compressedPublicKey)
     const rip = crypto.ripemd160(sha)
-    const extendedRip = Buffer.concat([Buffer.from([0]), rip])
+    const extendedRip = Buffer.concat([addressType, rip])
     const checksum = crypto.sha256(crypto.sha256(extendedRip)).slice(0, 4)
     const extendedWithChecksum = Buffer.concat([extendedRip, checksum])
     const bitcoinAddress58Check = base58Check.getString(extendedWithChecksum)

@@ -13,6 +13,12 @@ export function sha256(buffer: Buffer): Buffer {
     return Buffer.from(base64, "base64")
 }
 
+export function sha128(buffer: Buffer): Buffer {
+    const libWordArray = cryptojs.lib.WordArray.create(buffer)
+    const base64 = cryptojs.SHA1(libWordArray).toString(cryptojs.enc.Base64)
+    return Buffer.from(base64, "base64")
+}
+
 export function ripemd160(buffer: Buffer): Buffer {
     const libWordArray = cryptojs.lib.WordArray.create(buffer)
     const base64 = cryptojs.RIPEMD160(libWordArray).toString(cryptojs.enc.Base64)

@@ -5,6 +5,7 @@ declare module "bn.js" {
         constructor(number: string, base: number)
         constructor(buffer: Buffer)
         constructor(number?: number)
+        constructor(number: string, encoding?: string)
         length: number
         negative: number
         red: any
@@ -13,9 +14,11 @@ declare module "bn.js" {
         toArrayLike(type: typeof Buffer): Buffer
         toNumber()
         add(other: BN): BN
+        sub(other: BN): BN
         mul(other: BN): BN
         pow(other: BN): BN
         mod(other: BN): BN
+        invm(other: BN): BN
         gt(other: BN): BN
         lt(other: BN): BN
         divmod(other: BN): { div: BN, mod: BN }

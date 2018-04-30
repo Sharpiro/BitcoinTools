@@ -1,5 +1,5 @@
 <div class="row">
-  <mat-form-field style="width:35%;">
+  <mat-form-field class="form-width">
     <input matInput placeholder="base58" [(ngModel)]="base58Data" (input)="onBase58Input($event)" />
   </mat-form-field>
   <div *ngFor="let x of feedback">
@@ -8,7 +8,7 @@
 </div>
 
 <div class="row">
-  <mat-form-field style="width:35%;">
+  <mat-form-field class="form-width">
     <input matInput placeholder="hex" [(ngModel)]="hexData" (input)="onHexInput($event)">
   </mat-form-field>
 </div>

@@ -1,3 +1,7 @@
 .row{
     padding:15px;
 }
+
+.form-width {
+    width: 100%;
+}

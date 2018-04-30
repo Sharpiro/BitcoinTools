@@ -26,5 +26,13 @@ export function getRandomBytes(length: number): Buffer {
 }
 
 export function pbkdf2(password: Buffer, salt?: Buffer, iterations = 2048, outputSizeBytes = 64, hashAlg: "sha256" | "sha512" = "sha512"): Buffer {
-    return pbkdf2Lib.pbkdf2Sync(password, salt, 2048, 64, 'sha512')
+    return pbkdf2Lib.pbkdf2Sync(password, salt, iterations, outputSizeBytes, hashAlg)
+}
+
+export function hmac512(data: Buffer, key: Buffer): Buffer {
+    const dataArray = cryptojs.lib.WordArray.create(data)
+    const keyArray = cryptojs.lib.WordArray.create(key)
+    const hmac = cryptojs.HmacSHA512(dataArray, keyArray)
+    const base64 = hmac.toString(cryptojs.enc.Base64)
+    return Buffer.from(base64, "base64")
 }

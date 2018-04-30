@@ -16,6 +16,7 @@ export function getBitcoinAddress(compressedPublicKey: Buffer, addressType: Buff
 
 /** Generate new mnemonic words from a random buffer */
 export function generateMnemonic(randomBuffer: Buffer): string[] {
+    if (randomBuffer.length > 32) throw "random buffer must be less than or equal to 256 bits"
     const hashLength = randomBuffer.length * 8 / 32
     if (hashLength % 1 !== 0) throw "random buffer in bits must be divisible by 32"
 
@@ -25,7 +26,7 @@ export function generateMnemonic(randomBuffer: Buffer): string[] {
     for (var i = 0; i < randomBuffer.length; i++) {
         data += toBinaryString(randomBuffer[i])
     }
-    data += toBinaryString(hash[0]).slice(0, 4)
+    data += toBinaryString(hash[0]).slice(0, hashLength)
 
     let mnemonic: string[] = []
     for (let i = 0; i < data.length; i += 11) {
@@ -40,6 +41,16 @@ export function getSeedFromMnemonic(mnemonic: string[]): Buffer {
     const menomnicBuffer = Buffer.from(mnemonic.join(" "))
     const actualSeed = crypto.pbkdf2(menomnicBuffer, Buffer.from("mnemonic"))
     return actualSeed
+}
+
+export function getRootKeyFromSeed(rootSeed: Buffer): Buffer {
+    const key = Buffer.from("Bitcoin seed", "utf8")
+    const rootKey = crypto.hmac512(rootSeed, key)
+    const prefix = Buffer.from("0488ade4000000000000000000", "hex")
+    const masterKey = rootKey.slice(0, 32)
+    const masterChain = rootKey.slice(-32)
+    const combined = Buffer.concat([prefix, masterChain, Buffer.from([0]), masterKey])
+    return combined
 }
 
 function toBinaryString(number: number, maxPadding = 8): string {

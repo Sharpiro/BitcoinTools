@@ -18,6 +18,7 @@ declare module "bn.js" {
         mul(other: BN): BN
         pow(other: BN): BN
         mod(other: BN): BN
+        umod(other: BN): BN
         invm(other: BN): BN
         gt(other: BN): BN
         lt(other: BN): BN

@@ -1,25 +1,40 @@
 <div class="row">
-  <div class="form-width">
-    <mat-form-field class="form-width">
-      <input matInput placeholder="private key" [(ngModel)]="privateKey" (input)="onPrivateKeyInput()" />
-    </mat-form-field>
-  </div>
   <mat-form-field class="form-width">
-    <input matInput placeholder="public key compressed" [(ngModel)]="publicKey" (input)="onPublicKeyInput()">
+    <input [errorStateMatcher]="matcher" matInput placeholder="private key" [(ngModel)]="privateKey" (input)="onPrivateKeyInput()"
+      appHexValidation/>
+    <mat-error>
+      Please enter a valid email address
+    </mat-error>
+  </mat-form-field>
+  <!-- <mat-form-field class="form-width">
+    <input [errorStateMatcher]="matcher" matInput placeholder="private key" [formControl]="emailFormControl" />
+    <mat-error>
+      Please enter a valid email address
+    </mat-error>
+    <mat-error>
+      Email is
+      <strong>required</strong>
+    </mat-error>
+    <mat-error>
+      Other stuff
+    </mat-error>
+  </mat-form-field> -->
+  <mat-form-field class="form-width">
+    <input matInput placeholder="public key compressed" [(ngModel)]="publicKey" (input)="onPublicKeyInput()" appHexValidation>
   </mat-form-field>
   <mat-form-field class="form-width" *ngIf="!hacking">
     <input matInput placeholder="bitcoin address" [(ngModel)]="bitcoinAddress" readonly>
   </mat-form-field>
   <mat-form-field class="form-width">
-    <input matInput placeholder="data1" [(ngModel)]="data1">
+    <input matInput placeholder="data1" [(ngModel)]="data1" appHexValidation>
   </mat-form-field>
   <mat-form-field class="form-width" *ngIf="hacking">
-    <input matInput placeholder="data2" [(ngModel)]="data2">
+    <input matInput placeholder="data2" [(ngModel)]="data2" appHexValidation>
   </mat-form-field>
 </div>
 
 <div class="row">
-    <button mat-raised-button (click)="onGenerateClick()">Generate</button>
+  <button mat-raised-button (click)="onGenerateClick()">Generate</button>
   <button mat-raised-button (click)="onCreateSignatureClick()">Create Signature</button>
   <button mat-raised-button (click)="onVerifySignatureClick()">Verify Signature</button>
   <button mat-raised-button (click)="onHackSignatureClick()" [style.visibility]="hacking ? 'visible' : 'hidden'">Hack Signature</button>
@@ -28,9 +43,9 @@
 
 <div class="row">
   <mat-form-field class="form-width">
-    <input matInput placeholder="signature1" [(ngModel)]="signature1">
+    <input matInput placeholder="signature1" [(ngModel)]="signature1" appHexValidation>
   </mat-form-field>
   <mat-form-field class="form-width" *ngIf="hacking">
-    <input matInput placeholder="signature2" [(ngModel)]="signature2">
+    <input matInput placeholder="signature2" [(ngModel)]="signature2" appHexValidation>
   </mat-form-field>
 </div>

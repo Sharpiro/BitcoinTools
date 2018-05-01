@@ -9,6 +9,15 @@ import { ec as EC } from 'elliptic'
 import * as Signature from 'elliptic/lib/elliptic/ec/signature'
 // const zlib = require('zlib');
 import * as zlib from 'zlib'
+import { ErrorStateMatcher } from '@angular/material';
+import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
+
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 
 @Component({
   selector: 'app-signature',
@@ -26,6 +35,11 @@ export class SignatureComponent implements OnInit {
   constantK = new BN("340a098bb9702ee3671cf9c7301ba1afb40f5180a1685ff13ade5738a08a0be5", "hex")
   hacking = true
 
+  matcher = new MyErrorStateMatcher();
+  emailFormControl = new FormControl('', [
+    Validators.required,
+    Validators.email,
+  ]);
 
   constructor() { }
 

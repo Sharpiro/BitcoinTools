@@ -7,7 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { MatButtonModule, MatToolbarModule, MatInputModule, MatCheckboxModule } from '@angular/material';
 import { ScriptingComponent } from './scripting/scripting.component';
 import { ScriptingService } from './scripting/scripting.service';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { Base58checkComponent } from './base58check/base58check.component';
 import { SignatureComponent } from './signature/signature.component';
@@ -26,6 +26,7 @@ import { HexValidationDirective } from './shared/hex-validation/hex-validation.d
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    ReactiveFormsModule,
     MatButtonModule,
     MatToolbarModule,
     MatInputModule,

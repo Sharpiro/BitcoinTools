@@ -5,7 +5,7 @@ declare module "bn.js" {
         constructor(number: string, base: number)
         constructor(buffer: Buffer)
         constructor(number?: number)
-        constructor(number: string, encoding?: string)
+        constructor(number: string, encoding: string)
         length: number
         negative: number
         red: any

@@ -26,7 +26,8 @@
 <div class="row">
   <button mat-raised-button (click)="onCreateSignatureClick()">Create Signature</button>
   <button mat-raised-button (click)="onVerifySignatureClick()">Verify Signature</button>
-  <button mat-raised-button (click)="onHackSignatureClick()">Hack Signature</button>
+  <button mat-raised-button (click)="onHackSignatureClick()" [disabled]="!hacking">Hack Signature</button>
+  <mat-checkbox [(ngModel)]="hacking">Hack</mat-checkbox>
 </div>
 
 <div class="row">
@@ -37,6 +38,6 @@
 
 <div class="row">
   <mat-form-field class="form-width">
-    <input matInput placeholder="signature2" [(ngModel)]="signature2" disabled>
+    <input matInput placeholder="signature2" [(ngModel)]="signature2" [disabled]="!hacking">
   </mat-form-field>
 </div>

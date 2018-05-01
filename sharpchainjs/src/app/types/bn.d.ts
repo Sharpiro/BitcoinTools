@@ -20,6 +20,7 @@ declare module "bn.js" {
         mod(other: BN): BN
         umod(other: BN): BN
         invm(other: BN): BN
+        eq(other: BN): boolean
         gt(other: BN): BN
         lt(other: BN): BN
         divmod(other: BN): { div: BN, mod: BN }

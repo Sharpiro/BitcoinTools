@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { Base58checkComponent } from './base58check/base58check.component';
 import { SignatureComponent } from './signature/signature.component';
-
+import { HexValidationDirective } from './shared/hex-validation/hex-validation.directive';
 
 @NgModule({
   declarations: [
@@ -19,7 +19,8 @@ import { SignatureComponent } from './signature/signature.component';
     ScriptingComponent,
     DashboardComponent,
     Base58checkComponent,
-    SignatureComponent
+    SignatureComponent,
+    HexValidationDirective
   ],
   imports: [
     BrowserModule,

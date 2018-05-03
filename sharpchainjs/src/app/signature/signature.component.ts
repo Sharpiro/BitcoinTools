@@ -5,11 +5,8 @@ import * as bitcoin from "../shared/bitcoin"
 import * as toastr from "toastr"
 import { Buffer } from "buffer"
 import { BN } from "bn.js"
-import { ec as EC } from 'elliptic'
-import * as Signature from 'elliptic/lib/elliptic/ec/signature'
-import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material';
-import { FormControl, FormGroupDirective, NgForm, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
-import { hexValidator } from '../shared/Validations/CustomValidators';
+import { hexValidator } from '../shared/angular_extensions/customValidators';
+import { CustomFormControl } from '../shared/angular_extensions/customFormControl';
 
 @Component({
   selector: 'app-signature',
@@ -20,25 +17,23 @@ export class SignatureComponent implements OnInit {
   constantK = new BN("340a098bb9702ee3671cf9c7301ba1afb40f5180a1685ff13ade5738a08a0be5", "hex")
   hacking = true
 
-  privateKeyControl = new FormControl('', [hexValidator]);
-  publicKeyControl = new FormControl('', [hexValidator]);
-  bitcoinAddressControl = new FormControl();
-  data1Control = new FormControl('', [hexValidator]);
-  data2Control = new FormControl('', [hexValidator]);
-  signature1Control = new FormControl('', [hexValidator]);
-  signature2Control = new FormControl('', [hexValidator]);
+  privateKeyControl = new CustomFormControl('', [hexValidator]);
+  publicKeyControl = new CustomFormControl('', [hexValidator]);
+  bitcoinAddressControl = new CustomFormControl();
+  data1Control = new CustomFormControl('', [hexValidator]);
+  data2Control = new CustomFormControl('', [hexValidator]);
+  signature1Control = new CustomFormControl('', [hexValidator]);
+  signature2Control = new CustomFormControl('', [hexValidator]);
 
   constructor() {
     this.data1Control.setValue("39f03ee16b6d1d99b0c29676b7ea361f544d7951c6898e0dc9ae03cb584101bd")
     this.data2Control.setValue("4f2c905eef09b389ef6ce6e4de410eb6b7ee3f85d3941e175433cd98bcce7510")
-    // this.privateKeyControl.valueChanges.subscribe(this.onPrivateKeyInput)
-    // this.publicKeyControl.valueChanges.subscribe(this.onPublicKeyInput)
   }
 
   ngOnInit() { }
 
   onPrivateKeyInput = () => {
-    if (!this.privateKeyControl.value || this.privateKeyControl.invalid) {
+    if (this.privateKeyControl.invalidOrEmpty) {
       this.publicKeyControl.reset()
       this.bitcoinAddressControl.reset()
       return
@@ -51,7 +46,7 @@ export class SignatureComponent implements OnInit {
 
   onPublicKeyInput = () => {
     this.privateKeyControl.reset()
-    if (!this.publicKeyControl.value || this.publicKeyControl.invalid) {
+    if (this.publicKeyControl.invalidOrEmpty) {
       this.bitcoinAddressControl.reset()
       return
     }
@@ -68,16 +63,16 @@ export class SignatureComponent implements OnInit {
   }
 
   onCreateSignatureClick() {
-    if (!this.privateKeyControl.value) {
-      toastr.error("must provide private key")
+    if (this.privateKeyControl.invalidOrEmpty) {
+      toastr.error("must provide a valid private key in hex")
       return
     }
-    if (!this.data1Control.value) {
-      toastr.error("must provide data in hex")
+    if (this.data1Control.invalidOrEmpty) {
+      toastr.error("must provide valid hex for 'data'")
       return
     }
-    if (this.hacking && !this.data2Control.value) {
-      toastr.error("must provide data2 in hex while 'hacking'")
+    if (this.hacking && this.data2Control.invalidOrEmpty) {
+      toastr.error("must provide valid hex for 'data2' while 'hacking'")
       return
     }
 
@@ -96,25 +91,25 @@ export class SignatureComponent implements OnInit {
   }
 
   onVerifySignatureClick() {
-    if (!this.data1Control.value) {
-      toastr.error("must provide data in hex")
+    if (this.data1Control.invalidOrEmpty) {
+      toastr.error("must provide valid 'data1' in hex")
       return
     }
-    if (!this.publicKeyControl.value) {
-      toastr.error("must provide public key compressed")
+    if (this.publicKeyControl.invalidOrEmpty) {
+      toastr.error("must provide a valid public key compressed in hex")
       return
     }
-    if (!this.signature1Control.value) {
-      toastr.error("must provide signature")
+    if (this.signature1Control.invalidOrEmpty) {
+      toastr.error("must provide valid signature in hex")
       return
     }
     if (this.hacking) {
-      if (!this.data2Control.value) {
-        toastr.error("must provide data2 in hex while 'hacking'")
+      if (this.data2Control.invalidOrEmpty) {
+        toastr.error("must provide valid data2 in hex while 'hacking'")
         return
       }
-      if (!this.signature2Control.value) {
-        toastr.error("must provide signature2 in hex while 'hacking'")
+      if (this.signature2Control.invalidOrEmpty) {
+        toastr.error("must provide valid signature2 in hex while 'hacking'")
         return
       }
     }
@@ -142,51 +137,25 @@ export class SignatureComponent implements OnInit {
   }
 
   onHackSignatureClick() {
-    if (!this.signature1Control.value || !this.signature2Control.value) {
-      toastr.error("must provide 2 signatures")
+    if (this.signature1Control.invalidOrEmpty || this.signature2Control.invalidOrEmpty) {
+      toastr.error("must provide 2 valid signatures in hex")
       return
     }
-    if (!this.data1Control.value || !this.data2Control.value) {
-      toastr.error("must provide 2 data inputs")
-      return
-    }
-
-    const ec = new EC('secp256k1')
-    const expectedOptions = { k: (x) => this.constantK }
-
-    const z1 = new BN(this.data1Control.value, "hex")
-    const sig1 = curves.getSignature(Buffer.from(this.signature1Control.value, "hex"))
-    const r1 = sig1.r
-    const s1 = sig1.s
-
-    const z2 = new BN(this.data2Control.value, "hex")
-    const sig2 = curves.getSignature(Buffer.from(this.signature2Control.value, "hex"))
-    const r2 = sig2.r
-    const s2 = sig2.s
-
-    const left = z1.sub(z2).umod(ec.curve.n)
-    const right = s1.sub(s2).umod(ec.curve.n).invm(ec.curve.n)
-    const k = left.mul(right).umod(ec.curve.n)
-
-    const dALeft = s1.mul(k).umod(ec.curve.n).sub(z1).umod(ec.curve.n)
-    const dARight = r1.invm(ec.curve.n)
-    const dA = dALeft.mul(dARight).umod(ec.curve.n)
-
-    const privateKeyPair = ec.keyFromPrivate(dA.toArrayLike(Buffer))
-    const options = { k: (x) => k }
-    var actualSignature1 = privateKeyPair.sign(z1.toArrayLike(Buffer), undefined, options)
-    var actualSignature2 = privateKeyPair.sign(z2.toArrayLike(Buffer), undefined, options)
-
-    if (!r1.eq(r2)) {
-      toastr.error("unhackable: r values are not equal, thus unique 'k' values were used")
+    if (this.data1Control.invalidOrEmpty || this.data2Control.invalidOrEmpty) {
+      toastr.error("must provide 2 valid data inputs in hex")
       return
     }
 
-    if (Buffer.from(actualSignature1.toDER()).toString("hex") !== this.signature1Control.value
-      || Buffer.from(actualSignature2.toDER()).toString("hex") !== this.signature2Control.value) {
-      toastr.error("failure: could not hack signature")
-      return
+    try {
+      const data1Buffer = Buffer.from(this.data1Control.value, "hex")
+      const data2Buffer = Buffer.from(this.data2Control.value, "hex")
+      const signature1Buffer = Buffer.from(this.signature1Control.value, "hex")
+      const signature2Buffer = Buffer.from(this.signature2Control.value, "hex")
+
+      const result = curves.hackSignatures(data1Buffer, data2Buffer, signature1Buffer, signature2Buffer)
+      toastr.success(`hacked private key: ${result.dA.toString("hex")}`)
+    } catch (err) {
+      toastr.error(err)
     }
-    toastr.success(`hacked private key: ${dA.toArrayLike(Buffer).toString("hex")}`)
   }
 }

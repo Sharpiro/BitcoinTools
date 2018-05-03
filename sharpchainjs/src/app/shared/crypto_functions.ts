@@ -35,8 +35,8 @@ export function pbkdf2(password: Buffer, salt?: Buffer, iterations = 2048, outpu
     return pbkdf2Lib.pbkdf2Sync(password, salt, iterations, outputSizeBytes, hashAlg)
 }
 
-export function hmac512(data: Buffer, key: Buffer): Buffer {
-    const dataArray = cryptojs.lib.WordArray.create(data)
+export function hmac512(message: Buffer, key: Buffer): Buffer {
+    const dataArray = cryptojs.lib.WordArray.create(message)
     const keyArray = cryptojs.lib.WordArray.create(key)
     const hmac = cryptojs.HmacSHA512(dataArray, keyArray)
     const base64 = hmac.toString(cryptojs.enc.Base64)

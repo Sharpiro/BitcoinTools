@@ -1,35 +1,34 @@
 <div class="row">
   <mat-form-field class="form-width">
-    <input [errorStateMatcher]="matcher" matInput placeholder="private key" [(ngModel)]="privateKey" (input)="onPrivateKeyInput()"
-      appHexValidation/>
-    <mat-error>
-      Please enter a valid email address
+    <input (input)="onPrivateKeyInput($event)" matInput placeholder="private key" [formControl]="privateKeyControl" />
+    <mat-error *ngIf="privateKeyControl.hasError('hex')">
+      Invalid hex
     </mat-error>
   </mat-form-field>
-  <!-- <mat-form-field class="form-width">
-    <input [errorStateMatcher]="matcher" matInput placeholder="private key" [formControl]="emailFormControl" />
-    <mat-error>
-      Please enter a valid email address
-    </mat-error>
-    <mat-error>
-      Email is
-      <strong>required</strong>
-    </mat-error>
-    <mat-error>
-      Other stuff
-    </mat-error>
-  </mat-form-field> -->
+
   <mat-form-field class="form-width">
-    <input matInput placeholder="public key compressed" [(ngModel)]="publicKey" (input)="onPublicKeyInput()" appHexValidation>
+    <input (input)="onPublicKeyInput($event)" matInput placeholder="public key compressed" [formControl]="publicKeyControl" />
+    <mat-error *ngIf="publicKeyControl.hasError('hex')">
+      Invalid hex
+    </mat-error>
   </mat-form-field>
+
   <mat-form-field class="form-width" *ngIf="!hacking">
-    <input matInput placeholder="bitcoin address" [(ngModel)]="bitcoinAddress" readonly>
+    <input matInput placeholder="bitcoinAddress" [formControl]="bitcoinAddressControl" readonly/>
   </mat-form-field>
+
   <mat-form-field class="form-width">
-    <input matInput placeholder="data1" [(ngModel)]="data1" appHexValidation>
+    <input matInput placeholder="data1" [formControl]="data1Control" />
+    <mat-error *ngIf="data1Control.hasError('hex')">
+      Invalid hex
+    </mat-error>
   </mat-form-field>
+
   <mat-form-field class="form-width" *ngIf="hacking">
-    <input matInput placeholder="data2" [(ngModel)]="data2" appHexValidation>
+    <input matInput placeholder="data2" [formControl]="data2Control" />
+    <mat-error *ngIf="data2Control.hasError('hex')">
+      Invalid hex
+    </mat-error>
   </mat-form-field>
 </div>
 
@@ -43,9 +42,16 @@
 
 <div class="row">
   <mat-form-field class="form-width">
-    <input matInput placeholder="signature1" [(ngModel)]="signature1" appHexValidation>
+    <input matInput placeholder="signature1" [formControl]="signature1Control" />
+    <mat-error *ngIf="signature1Control.hasError('hex')">
+      Invalid hex
+    </mat-error>
   </mat-form-field>
+
   <mat-form-field class="form-width" *ngIf="hacking">
-    <input matInput placeholder="signature2" [(ngModel)]="signature2" appHexValidation>
+    <input matInput placeholder="signature2" [formControl]="signature2Control" />
+    <mat-error *ngIf="signature2Control.hasError('hex')">
+      Invalid hex
+    </mat-error>
   </mat-form-field>
 </div>

@@ -4,14 +4,13 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { WebWorkerService } from "angular2-web-worker"
 import { AppRoutingModule } from './app-routing.module';
-import { MatButtonModule, MatToolbarModule, MatInputModule, MatCheckboxModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatInputModule, MatCheckboxModule, ShowOnDirtyErrorStateMatcher, ErrorStateMatcher } from '@angular/material';
 import { ScriptingComponent } from './scripting/scripting.component';
 import { ScriptingService } from './scripting/scripting.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { Base58checkComponent } from './base58check/base58check.component';
 import { SignatureComponent } from './signature/signature.component';
-import { HexValidationDirective } from './shared/hex-validation/hex-validation.directive';
 
 @NgModule({
   declarations: [
@@ -19,8 +18,7 @@ import { HexValidationDirective } from './shared/hex-validation/hex-validation.d
     ScriptingComponent,
     DashboardComponent,
     Base58checkComponent,
-    SignatureComponent,
-    HexValidationDirective
+    SignatureComponent
   ],
   imports: [
     BrowserModule,
@@ -35,7 +33,8 @@ import { HexValidationDirective } from './shared/hex-validation/hex-validation.d
   ],
   providers: [
     WebWorkerService,
-    ScriptingService
+    ScriptingService,
+    { provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }
   ],
   bootstrap: [AppComponent]
 })

@@ -11,6 +11,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { Base58checkComponent } from './base58check/base58check.component';
 import { SignatureComponent } from './signature/signature.component';
+import { WalletComponent } from './wallet/wallet.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { SignatureComponent } from './signature/signature.component';
     ScriptingComponent,
     DashboardComponent,
     Base58checkComponent,
-    SignatureComponent
+    SignatureComponent,
+    WalletComponent
   ],
   imports: [
     BrowserModule,

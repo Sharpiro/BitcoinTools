@@ -30,6 +30,13 @@
       Invalid hex
     </mat-error>
   </mat-form-field>
+
+  <mat-form-field class="form-width" *ngIf="hacking">
+    <input matInput placeholder="k" [formControl]="kControl"/>
+    <mat-error *ngIf="kControl.hasError('hex')">
+      Invalid hex
+    </mat-error>
+  </mat-form-field>
 </div>
 
 <div class="row">

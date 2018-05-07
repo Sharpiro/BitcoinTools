@@ -1,6 +1,6 @@
 // const crypto = require('crypto');
-import { Buffer } from 'buffer';
-import * as crypto from "./crypto_functions"
+import { Buffer } from 'buffer'
+import * as crypto from './crypto_functions'
 
 export class Block {
     version: number
@@ -10,16 +10,46 @@ export class Block {
     nonce: number
 
     constructor(init?: Partial<Block>) {
-        Object.assign(this, init);
+        Object.assign(this, init)
+    }
+
+    static createGenesis(version) {
+        const block = new Block({
+            version: version,
+            previousBlockHash: new Buffer(0),
+            data: Buffer.from('genesis', 'utf8'),
+            // timestamp: new Date().getDate(),
+            difficulty: 1
+        })
+        return block
+    }
+
+    static create(version, data, difficulty, previousHash) {
+        const versionBuffer = Block.get32BitBuffer(version)
+        const dataBuffer = Buffer.from(data, 'utf8')
+        const block = new Block({
+            // version: version,
+            previousBlockHash: previousHash,
+            data: dataBuffer,
+            // timestamp: new Date().getDate(),
+            difficulty: difficulty,
+        })
+        return block
+    }
+
+    static get32BitBuffer(number) {
+        const buffer = new Buffer(4)
+        buffer.writeInt32LE(number, 0)
+        return buffer
     }
 
     verify() {
-        var blockHash = this.getHash(this.nonce)
+        const blockHash = this.getHash(this.nonce)
         for (let j = 0; j < this.difficulty; j++) {
-            if (blockHash[j] != 0) {
+            if (blockHash[j] !== 0) {
                 return false
             }
-            if (j == this.difficulty - 1) {
+            if (j === this.difficulty - 1) {
                 return true
             }
         }
@@ -51,42 +81,12 @@ export class Block {
         for (let nonce = 0; nonce < 1000000; nonce++) {
             const blockHash = this.getHash(nonce)
             for (let j = 0; j < this.difficulty; j++) {
-                if (blockHash[j] != 0) break
-                if (j == this.difficulty - 1) {
+                if (blockHash[j] !== 0) break
+                if (j === this.difficulty - 1) {
                     return { nonce, blockHash }
                 }
             }
         }
         return -1
-    }
-
-    static createGenesis(version) {
-        const block = new Block({
-            version: version,
-            previousBlockHash: new Buffer(0),
-            data: Buffer.from("genesis", "utf8"),
-            // timestamp: new Date().getDate(),
-            difficulty: 1
-        })
-        return block
-    }
-
-    static create(version, data, difficulty, previousHash) {
-        const versionBuffer = Block.get32BitBuffer(version)
-        const dataBuffer = Buffer.from(data, "utf8")
-        const block = new Block({
-            // version: version,
-            previousBlockHash: previousHash,
-            data: dataBuffer,
-            // timestamp: new Date().getDate(),
-            difficulty: difficulty,
-        })
-        return block
-    }
-
-    static get32BitBuffer(number) {
-        const buffer = new Buffer(4)
-        buffer.writeInt32LE(number, 0)
-        return buffer
     }
 }

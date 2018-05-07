@@ -1,44 +1,43 @@
 import { ec as EC, Signature as ISignature, KeyPair } from 'elliptic'
 import * as Signature from 'elliptic/lib/elliptic/ec/signature'
-import { Buffer } from "buffer"
-import { BN } from "bn.js"
+import { Buffer } from 'buffer'
+import { BN } from 'bn.js'
 
 const ec = new EC('secp256k1')
 const uncompressedPrefix = 4
 const compressedOddYPrefix = 3
 const compressedEvenYPrefix = 2
 
-export function sign(messageHash: Buffer, privateKey: Buffer, options: { k: (x) => BN } = undefined): Buffer {
+export function sign(messageHash: Buffer, privateKey: Buffer, options: { k: (x) => BN }): Buffer {
     const privateKeyPair = ec.keyFromPrivate(privateKey)
-    var signature = privateKeyPair.sign(messageHash, undefined, options)
-    var derSignature = signature.toDER()
+    const signature = privateKeyPair.sign(messageHash, undefined, options)
+    const derSignature = signature.toDER()
     const sigBuffer = Buffer.from(derSignature)
     return sigBuffer
 }
 
 export function getSignature(derSignature: Buffer): ISignature {
     try {
-        const signature = new Signature(derSignature.toString("hex"), "hex")
+        const signature = new Signature(derSignature.toString('hex'), 'hex')
         return signature
     } catch (ex) {
-        throw "invalid DER signature"
+        throw new Error('invalid DER signature')
     }
 }
 
 export function verify(messageHash: Buffer, signature: Buffer, publicKey: Buffer): boolean {
     try {
-        const importedPubKeyPair = ec.keyFromPublic(publicKey);
+        const importedPubKeyPair = ec.keyFromPublic(publicKey)
         const result = importedPubKeyPair.verify(messageHash, signature)
         return result
-    }
-    catch (err) {
+    } catch (err) {
         return false
     }
 }
 
 export function hackSignatures(data1: Buffer, data2: Buffer, signature1: Buffer, signature2: Buffer) {
-    if (data1.compare(data2) == 0) {
-        throw "data1 and data2 cannot be equal"
+    if (data1.compare(data2) === 0) {
+        throw new Error('data1 and data2 cannot be equal')
     }
     const z1 = new BN(data1)
     const sig1 = getSignature(signature1)
@@ -51,7 +50,7 @@ export function hackSignatures(data1: Buffer, data2: Buffer, signature1: Buffer,
     const s2 = sig2.s
 
     if (!r1.eq(r2)) {
-        throw "unhackable: r values are not equal, thus unique 'k' values were used"
+        throw new Error('unhackable: r values are not equal, thus unique \'k\' values were used')
     }
 
     const left = z1.sub(z2).umod(ec.curve.n)
@@ -64,12 +63,12 @@ export function hackSignatures(data1: Buffer, data2: Buffer, signature1: Buffer,
 
     const privateKeyPair = ec.keyFromPrivate(dA.toArrayLike(Buffer))
     const options = { k: (x) => k }
-    var actualSignature1 = privateKeyPair.sign(z1.toArrayLike(Buffer), undefined, options)
-    var actualSignature2 = privateKeyPair.sign(z2.toArrayLike(Buffer), undefined, options)
+    const actualSignature1 = privateKeyPair.sign(z1.toArrayLike(Buffer), undefined, options)
+    const actualSignature2 = privateKeyPair.sign(z2.toArrayLike(Buffer), undefined, options)
 
     if (Buffer.from(actualSignature1.toDER()).compare(signature1) !== 0
         || Buffer.from(actualSignature2.toDER()).compare(signature2) !== 0) {
-        throw "failure: could not hack signature"
+        throw new Error('failure: could not hack signature')
     }
 
     return { dA: dA.toArrayLike(Buffer), k: k.toArrayLike(Buffer) }
@@ -77,7 +76,7 @@ export function hackSignatures(data1: Buffer, data2: Buffer, signature1: Buffer,
 
 export function getCompressedPublicKey(privateKey: Buffer): Buffer {
     const publicKeyPoint = ec.g.mul(new BN(privateKey))
-    const compressedPublicKeyBuffer = Buffer.from(publicKeyPoint.encode("array", true))
+    const compressedPublicKeyBuffer = Buffer.from(publicKeyPoint.encode('array', true))
     return compressedPublicKeyBuffer
 }
 

@@ -1,15 +1,15 @@
-import * as crypto from "./crypto_functions"
-import { Buffer } from "buffer"
-import { BN } from "bn.js"
+import * as crypto from './crypto_functions'
+import { Buffer } from 'buffer'
+import { BN } from 'bn.js'
 
-const codeString = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
+const codeString = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 
 export function getCharArray(buffer: Buffer): string[] {
     let bigX = new BN(buffer)
-    let codeArray: string[] = []
+    const codeArray: string[] = []
 
     while (bigX.gt(new BN())) {
-        var result = bigX.divmod(new BN(58))
+        const result = bigX.divmod(new BN(58))
         bigX = result.div
         codeArray.push(codeString[result.mod.toNumber()])
     }
@@ -18,7 +18,7 @@ export function getCharArray(buffer: Buffer): string[] {
 
 export function getString(buffer: Buffer): string {
     const codeArray = this.getCharArray(buffer)
-    const outputString = codeArray.join("")
+    const outputString = codeArray.join('')
     return outputString
 }
 

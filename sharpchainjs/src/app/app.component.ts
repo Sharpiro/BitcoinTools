@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core'
-import { WebWorkerService } from "angular2-web-worker"
+import { WebWorkerService } from 'angular2-web-worker'
 
 @Component({
   selector: 'app-root',
@@ -7,7 +7,7 @@ import { WebWorkerService } from "angular2-web-worker"
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'app';
+  title = 'app'
 
   constructor(private webWorkerService: WebWorkerService) { }
 

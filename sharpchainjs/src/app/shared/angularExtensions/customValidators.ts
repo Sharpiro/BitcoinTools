@@ -22,3 +22,11 @@ export function mnemonicValidator(control: AbstractControl): ValidationErrors | 
     const invalidWord = words.find(w => !wordList.includes(w))
     if (invalidWord) return { [errorLabel]: `invalid word ${invalidWord}` }
 }
+
+export function multipleOfThree(control: AbstractControl): ValidationErrors | null {
+    const errorLabel = 'multipleOfThree'
+    if (!control.value) return null
+    const value = +control.value
+    if (!value) return { [errorLabel]: 'invalid number' }
+    if (value % 3 !== 0) return { [errorLabel]: 'word size must be a multiple of 3' }
+}

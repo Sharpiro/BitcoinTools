@@ -14,6 +14,41 @@ export function getBitcoinAddress(compressedPublicKey: Buffer, addressType: Buff
     return bitcoinAddress58Check
 }
 
+/** Generate new mnemonic words from a random buffer */
+export function generateMnemonic(randomBuffer: Buffer): string[] {
+    const hashBitLength = randomBuffer.length * 8 / 32
+    if (hashBitLength % 1 !== 0) throw new Error('random buffer in bits must be divisible by 32')
+
+    const hashByteLength = Math.ceil(hashBitLength / 8)
+    const padding = 4 - hashByteLength
+    const hash = crypto.sha256(randomBuffer)
+    const checksumBuffer = Buffer.concat([new Buffer(padding), hash.slice(0, hashByteLength)])
+    const hashNumber = checksumBuffer.readInt32BE(0)
+
+    // console.log(hashNumber)
+
+    // console.log(randomBuffer)
+
+    let data = ''
+    for (let i = 0; i < randomBuffer.length; i++) {
+        data += toBinaryString(randomBuffer[i])
+    }
+    const checksum = toBinaryString(hashNumber, hashBitLength).slice(0, hashBitLength)
+    // console.log(checksum)
+
+    data += toBinaryString(hashNumber, hashBitLength).slice(0, hashBitLength)
+
+    // console.log(data)
+
+    const mnemonic: string[] = []
+    for (let i = 0; i < data.length; i += 11) {
+        const slice = data.slice(i, i + 11)
+        const index = parseInt(slice, 2)
+        mnemonic.push(wordList[index])
+    }
+    return mnemonic
+}
+
 export function getEntropyFromMnemonic(mnemonic: string[]): Buffer {
     const indexes = []
     const words = []
@@ -29,11 +64,12 @@ export function getEntropyFromMnemonic(mnemonic: string[]): Buffer {
     }
 
     const bytes: number[] = []
-    const checksumLength = mnemonic.length * 11 % 32
+    const checksumLengthBits = mnemonic.length * 11 % 32
+    const checksumLengthBytes = Math.ceil(checksumLengthBits / 8)
     // console.log(allBinary)
     // console.log(checksumLength)
 
-    for (let i = 8; i < allBinary.length; i++) {
+    for (let i = 8; i <= allBinary.length - checksumLengthBits; i++) {
         if (i % 8 !== 0) continue
         const bits = allBinary.slice(i - 8, i)
         const number = FromBinaryString(bits)
@@ -41,40 +77,29 @@ export function getEntropyFromMnemonic(mnemonic: string[]): Buffer {
     }
 
     const buffer = Buffer.from(bytes)
-    const expectedChecksum = FromBinaryString(allBinary.slice(-checksumLength))
-    const actualChecksum = (crypto.sha256(buffer)[0]) >> 8 - checksumLength
-    // console.log(expectedChecksum)
-    // console.log(actualChecksum)
 
-    if (expectedChecksum !== actualChecksum) throw new Error('Invalid mnemonic, checksum failed')
+    // console.log(buffer)
+
+    const expectedCheckBinaryString = allBinary.slice(-checksumLengthBits)
+    const expectedChecksumNumber = FromBinaryString(allBinary.slice(-checksumLengthBits))
+    const tempExpectedBuffer = new Buffer(4)
+    tempExpectedBuffer.writeInt32BE(expectedChecksumNumber, 0)
+
+    const hash = crypto.sha256(buffer)
+
+    // console.log(hash)
+
+    const padding = 4 - checksumLengthBytes
+    const actualChecksum = Buffer.concat([new Buffer(padding), hash.slice(0, checksumLengthBytes)])
+    // const actualChecksumNumber = actualChecksum.readInt32BE(0) >> (checksumLengthBytes * 8 - checksumLengthBits)
+    const actualChecksumBinaryString = toBinaryString(actualChecksum.readInt32BE(0), checksumLengthBits).slice(0, checksumLengthBits)
+
+    // console.log(expectedChecksumNumber)
+    // console.log(actualChecksumNumber)
+
+    if (expectedCheckBinaryString !== actualChecksumBinaryString) throw new Error('Invalid mnemonic, checksum failed')
 
     return buffer
-}
-
-/** Generate new mnemonic words from a random buffer */
-export function generateMnemonic(randomBuffer: Buffer): string[] {
-    const hashLength = randomBuffer.length * 8 / 32
-    if (hashLength % 1 !== 0) throw new Error('random buffer in bits must be divisible by 32')
-
-    const hash = crypto.sha256(randomBuffer)[0]
-
-    // console.log(randomBuffer)
-
-    let data = ''
-    for (let i = 0; i < randomBuffer.length; i++) {
-        data += toBinaryString(randomBuffer[i])
-    }
-    data += toBinaryString(hash).slice(0, hashLength)
-
-    // console.log(data);
-
-    const mnemonic: string[] = []
-    for (let i = 0; i < data.length; i += 11) {
-        const slice = data.slice(i, i + 11)
-        const index = parseInt(slice, 2)
-        mnemonic.push(wordList[index])
-    }
-    return mnemonic
 }
 
 export function getSeedFromMnemonic(mnemonic: string[]): Buffer {

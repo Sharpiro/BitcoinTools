@@ -14,6 +14,14 @@ export class DashboardComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('done')
+
+    const expectedNumber = 64
+    const buffer = new Buffer(4)
+    buffer.writeInt32BE(expectedNumber, 0)
+
+    const actualNumber = buffer.readUInt32BE(0)
+    console.log(expectedNumber)
+    console.log(buffer)
+    console.log(actualNumber.toString(2))
   }
 }

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core'
 import { CustomFormControl } from '../shared/angularExtensions/customFormControl'
-import { hexValidator, mnemonicValidator } from '../shared/angularExtensions/customValidators'
+import { hexValidator, mnemonicValidator, multipleOfThree } from '../shared/angularExtensions/customValidators'
 import * as toastr from 'toastr'
 import * as crypto from '../shared/crypto_functions'
 import * as bitcoin from '../shared/bitcoin'
 import { Buffer } from 'buffer'
 import { trigger, state, transition, animate, style, keyframes } from '@angular/animations'
+import { Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-wallet',
@@ -24,9 +25,10 @@ import { trigger, state, transition, animate, style, keyframes } from '@angular/
   ]
 })
 export class WalletComponent implements OnInit {
-  wordSizeControl = new CustomFormControl()
+  wordSizeControl = new CustomFormControl('', multipleOfThree) // broken
   entropyControl = new CustomFormControl('', [hexValidator])
   mnemonicControl = new CustomFormControl('', [mnemonicValidator])
+  wordSizeControlState: 'flashState' | '' = ''
   entropyControlState: 'flashState' | '' = ''
   mnemonicControlState: 'flashState' | '' = ''
 
@@ -51,6 +53,12 @@ export class WalletComponent implements OnInit {
       const menomnicArray = bitcoin.generateMnemonic(entropyBuffer)
       this.mnemonicControl.setValue(menomnicArray.join(' '))
       this.mnemonicControlState = 'flashState'
+      const entropyBitSize = entropyBuffer.length * 8
+      const wordSize = (entropyBitSize / 32 + entropyBitSize) / 11
+      if (this.wordSizeControl.value !== wordSize) {
+        this.wordSizeControl.setValue(wordSize)
+        this.wordSizeControlState = 'flashState'
+      }
     } catch (ex) {
       toastr.error(ex)
     }
@@ -66,15 +74,22 @@ export class WalletComponent implements OnInit {
       const entropyBuffer = bitcoin.getEntropyFromMnemonic(menomnicArray)
       this.entropyControl.setValue(entropyBuffer.toString('hex'))
       this.entropyControlState = 'flashState'
+      if (this.wordSizeControl.value !== menomnicArray.length) {
+        this.wordSizeControl.setValue(menomnicArray.length)
+        this.wordSizeControlState = 'flashState'
+      }
     } catch (ex) {
       toastr.error(ex)
     }
   }
 
   onGenerateClick() {
+    if (this.wordSizeControl.invalidOrEmpty) return
     try {
-      const temp = 2
-      const numOfBytes = 32
+      const mnemonicSize = +this.wordSizeControl.value
+      const totalBitLength = mnemonicSize * 11
+      const checksumLength = totalBitLength % 32
+      const numOfBytes = (totalBitLength - checksumLength) / 8
       const entropyBuffer = crypto.getRandomBytes(numOfBytes)
       this.entropyControl.setValue(entropyBuffer.toString('hex'))
       this.entropyControlState = 'flashState'

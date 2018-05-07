@@ -1,10 +1,10 @@
 <div class="row">
 
-  <mat-form-field class="form-width">
+  <mat-form-field class="form-width" [@flash]="wordSizeControlState" (@flash.done)="wordSizeControlState = ''">
     <input (input)="onWordSizeInput($event)" matInput placeholder="word size" [formControl]="wordSizeControl" />
-    <!-- <mat-error *ngIf="wordSizeControl.hasError('hex')">
-      {{entropyControl.getError('hex')}}
-    </mat-error> -->
+    <mat-error *ngIf="wordSizeControl.hasError('multipleOfThree')">
+      {{wordSizeControl.getError('multipleOfThree')}}
+    </mat-error>
   </mat-form-field>
 
   <mat-form-field class="form-width" [@flash]="entropyControlState" (@flash.done)="entropyControlState = ''">

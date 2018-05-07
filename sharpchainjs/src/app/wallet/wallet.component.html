@@ -1,12 +1,20 @@
 <div class="row">
-  <mat-form-field class="form-width" (@flyInOut.done)="logAnimation($event)" [@flyInOut]="state">
+
+  <mat-form-field class="form-width">
+    <input (input)="onWordSizeInput($event)" matInput placeholder="word size" [formControl]="wordSizeControl" />
+    <!-- <mat-error *ngIf="wordSizeControl.hasError('hex')">
+      {{entropyControl.getError('hex')}}
+    </mat-error> -->
+  </mat-form-field>
+
+  <mat-form-field class="form-width" [@flash]="entropyControlState" (@flash.done)="entropyControlState = ''">
     <input (input)="onEntropyInput($event)" matInput placeholder="entropy" [formControl]="entropyControl" />
     <mat-error *ngIf="entropyControl.hasError('hex')">
       {{entropyControl.getError('hex')}}
     </mat-error>
   </mat-form-field>
 
-  <mat-form-field class="form-width" [@flyInOut]="state">
+  <mat-form-field class="form-width" [@flash]="mnemonicControlState" (@flash.done)="mnemonicControlState = ''">
     <input (input)="onMnemonicInput($event)" matInput placeholder="mnemonic" [formControl]="mnemonicControl" />
     <mat-error *ngIf="mnemonicControl.hasError('mnemonic')">
       {{mnemonicControl.getError('mnemonic')}}

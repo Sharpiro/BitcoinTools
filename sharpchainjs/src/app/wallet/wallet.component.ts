@@ -12,9 +12,9 @@ import { trigger, state, transition, animate, style, keyframes } from '@angular/
   templateUrl: './wallet.component.html',
   styleUrls: ['./wallet.component.css'],
   animations: [
-    trigger('flyInOut', [
-      state('in', style({ backgroundColor: 'white' })),
-      transition('* => in', [
+    trigger('flash', [
+      state('flashState', style({ backgroundColor: 'white' })),
+      transition('* => flashState', [
         animate(500, keyframes([
           style({ backgroundColor: 'lightgreen', offset: 0.5 }),
           style({ backgroundColor: 'white', offset: 1.0 }),
@@ -24,19 +24,21 @@ import { trigger, state, transition, animate, style, keyframes } from '@angular/
   ]
 })
 export class WalletComponent implements OnInit {
+  wordSizeControl = new CustomFormControl()
   entropyControl = new CustomFormControl('', [hexValidator])
   mnemonicControl = new CustomFormControl('', [mnemonicValidator])
+  entropyControlState: 'flashState' | '' = ''
+  mnemonicControlState: 'flashState' | '' = ''
 
-  state: any
-
-  constructor() { }
-
-  ngOnInit() {
+  constructor() {
+    this.wordSizeControl.setValue(24)
   }
 
-  logAnimation($event) {
-    this.state = ''
-    console.log('logged')
+  ngOnInit() { }
+
+  onWordSizeInput() {
+    this.entropyControl.reset()
+    this.mnemonicControl.reset()
   }
 
   onEntropyInput() {
@@ -48,6 +50,7 @@ export class WalletComponent implements OnInit {
       const entropyBuffer = Buffer.from(this.entropyControl.value, 'hex')
       const menomnicArray = bitcoin.generateMnemonic(entropyBuffer)
       this.mnemonicControl.setValue(menomnicArray.join(' '))
+      this.mnemonicControlState = 'flashState'
     } catch (ex) {
       toastr.error(ex)
     }
@@ -60,19 +63,24 @@ export class WalletComponent implements OnInit {
     }
     try {
       const menomnicArray = (<string>this.mnemonicControl.value).split(' ')
-      this.entropyControl.setValue('aaff')
+      const entropyBuffer = bitcoin.getEntropyFromMnemonic(menomnicArray)
+      this.entropyControl.setValue(entropyBuffer.toString('hex'))
+      this.entropyControlState = 'flashState'
     } catch (ex) {
       toastr.error(ex)
     }
   }
 
   onGenerateClick() {
-    this.state = 'in'
     try {
-      const entropyBuffer = crypto.getRandomBytes(32)
+      const temp = 2
+      const numOfBytes = 32
+      const entropyBuffer = crypto.getRandomBytes(numOfBytes)
       this.entropyControl.setValue(entropyBuffer.toString('hex'))
+      this.entropyControlState = 'flashState'
       const menomnicArray = bitcoin.generateMnemonic(entropyBuffer)
       this.mnemonicControl.setValue(menomnicArray.join(' '))
+      this.mnemonicControlState = 'flashState'
     } catch (ex) {
       toastr.error(ex)
     }

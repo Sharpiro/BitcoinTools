@@ -1,12 +1,11 @@
 import { Component, OnInit } from '@angular/core'
 import { CustomFormControl } from '../shared/angularExtensions/customFormControl'
-import { hexValidator, mnemonicValidator, multipleOfThree } from '../shared/angularExtensions/customValidators'
+import { hexValidator, mnemonicValidator, wordSizeValidator } from '../shared/angularExtensions/customValidators'
 import * as toastr from 'toastr'
 import * as crypto from '../shared/crypto_functions'
 import * as bitcoin from '../shared/bitcoin'
 import { Buffer } from 'buffer'
 import { trigger, state, transition, animate, style, keyframes } from '@angular/animations'
-import { Validators } from '@angular/forms'
 
 @Component({
   selector: 'app-wallet',
@@ -25,7 +24,7 @@ import { Validators } from '@angular/forms'
   ]
 })
 export class WalletComponent implements OnInit {
-  wordSizeControl = new CustomFormControl('', multipleOfThree) // broken
+  wordSizeControl = new CustomFormControl('', [wordSizeValidator]) // broken
   entropyControl = new CustomFormControl('', [hexValidator])
   mnemonicControl = new CustomFormControl('', [mnemonicValidator])
   wordSizeControlState: 'flashState' | '' = ''
@@ -55,7 +54,7 @@ export class WalletComponent implements OnInit {
       this.mnemonicControlState = 'flashState'
       const entropyBitSize = entropyBuffer.length * 8
       const wordSize = (entropyBitSize / 32 + entropyBitSize) / 11
-      if (this.wordSizeControl.value !== wordSize) {
+      if (+this.wordSizeControl.value !== wordSize) {
         this.wordSizeControl.setValue(wordSize)
         this.wordSizeControlState = 'flashState'
       }
@@ -74,7 +73,7 @@ export class WalletComponent implements OnInit {
       const entropyBuffer = bitcoin.getEntropyFromMnemonic(menomnicArray)
       this.entropyControl.setValue(entropyBuffer.toString('hex'))
       this.entropyControlState = 'flashState'
-      if (this.wordSizeControl.value !== menomnicArray.length) {
+      if (+this.wordSizeControl.value !== menomnicArray.length) {
         this.wordSizeControl.setValue(menomnicArray.length)
         this.wordSizeControlState = 'flashState'
       }
@@ -99,9 +98,5 @@ export class WalletComponent implements OnInit {
     } catch (ex) {
       toastr.error(ex)
     }
-  }
-
-  onDebugClick() {
-    console.log(this.mnemonicControl.getError('mnemonic'))
   }
 }

@@ -2,8 +2,8 @@
 
   <mat-form-field class="form-width" [@flash]="wordSizeControlState" (@flash.done)="wordSizeControlState = ''">
     <input (input)="onWordSizeInput($event)" matInput placeholder="word size" [formControl]="wordSizeControl" />
-    <mat-error *ngIf="wordSizeControl.hasError('multipleOfThree')">
-      {{wordSizeControl.getError('multipleOfThree')}}
+    <mat-error *ngIf="wordSizeControl.hasError('wordSize')">
+      {{wordSizeControl.getError('wordSize')}}
     </mat-error>
   </mat-form-field>
 

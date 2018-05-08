@@ -23,10 +23,11 @@ export function mnemonicValidator(control: AbstractControl): ValidationErrors | 
     if (invalidWord) return { [errorLabel]: `invalid word ${invalidWord}` }
 }
 
-export function multipleOfThree(control: AbstractControl): ValidationErrors | null {
-    const errorLabel = 'multipleOfThree'
+export function wordSizeValidator(control: AbstractControl): ValidationErrors | null {
+    const errorLabel = 'wordSize'
     if (!control.value) return null
     const value = +control.value
     if (!value) return { [errorLabel]: 'invalid number' }
-    if (value % 3 !== 0) return { [errorLabel]: 'word size must be a multiple of 3' }
+    if (value > 93) return { [errorLabel]: 'must be less than 93' }
+    if (value % 3 !== 0) return { [errorLabel]: 'must be a multiple of 3' }
 }

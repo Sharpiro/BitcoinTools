@@ -23,7 +23,7 @@ export function generateMnemonic(randomBuffer: Buffer): string[] {
     const padding = 4 - hashByteLength
     const hash = crypto.sha256(randomBuffer)
     const checksumBuffer = Buffer.concat([new Buffer(padding), hash.slice(0, hashByteLength)])
-    const hashNumber = checksumBuffer.readInt32BE(0)
+    const hashNumber = checksumBuffer.readUInt32BE(0)
 
     // console.log(hashNumber)
 
@@ -33,10 +33,10 @@ export function generateMnemonic(randomBuffer: Buffer): string[] {
     for (let i = 0; i < randomBuffer.length; i++) {
         data += toBinaryString(randomBuffer[i])
     }
-    const checksum = toBinaryString(hashNumber, hashBitLength).slice(0, hashBitLength)
+    const checksum = toBinaryString(hashNumber, hashByteLength * 8).slice(0, hashBitLength)
     // console.log(checksum)
 
-    data += toBinaryString(hashNumber, hashBitLength).slice(0, hashBitLength)
+    data += checksum
 
     // console.log(data)
 
@@ -83,7 +83,7 @@ export function getEntropyFromMnemonic(mnemonic: string[]): Buffer {
     const expectedCheckBinaryString = allBinary.slice(-checksumLengthBits)
     const expectedChecksumNumber = FromBinaryString(allBinary.slice(-checksumLengthBits))
     const tempExpectedBuffer = new Buffer(4)
-    tempExpectedBuffer.writeInt32BE(expectedChecksumNumber, 0)
+    tempExpectedBuffer.writeUInt32BE(expectedChecksumNumber, 0)
 
     const hash = crypto.sha256(buffer)
 
@@ -91,8 +91,9 @@ export function getEntropyFromMnemonic(mnemonic: string[]): Buffer {
 
     const padding = 4 - checksumLengthBytes
     const actualChecksum = Buffer.concat([new Buffer(padding), hash.slice(0, checksumLengthBytes)])
+    const actualChecksumNumber = actualChecksum.readUInt32BE(0)
     // const actualChecksumNumber = actualChecksum.readInt32BE(0) >> (checksumLengthBytes * 8 - checksumLengthBits)
-    const actualChecksumBinaryString = toBinaryString(actualChecksum.readInt32BE(0), checksumLengthBits).slice(0, checksumLengthBits)
+    const actualChecksumBinaryString = toBinaryString(actualChecksumNumber, checksumLengthBytes * 8).slice(0, checksumLengthBits)
 
     // console.log(expectedChecksumNumber)
     // console.log(actualChecksumNumber)

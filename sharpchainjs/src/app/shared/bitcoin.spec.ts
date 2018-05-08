@@ -3,17 +3,116 @@ import * as bitcoin from './bitcoin'
 
 describe('bitcoin', () => {
     describe('generateMnemonic', () => {
-        it('generate a valid mnemonic', () => {
+        it('generate a 3-word mnemonic', () => {
+            const randomBuffer = Buffer.from('68e5c648', 'hex')
+            const expectedMnemonic = 'happy comfort must'.split(' ')
+            const actualMnemonic = bitcoin.generateMnemonic(randomBuffer)
+            assert.ok(actualMnemonic.every((v, i) => v === expectedMnemonic[i]))
+        })
+        it('generate a 6-word mnemonic', () => {
+            const randomBuffer = Buffer.from('2d79af316ff1719e', 'hex')
+            const expectedMnemonic = 'coin sniff slush that blade soon'.split(' ')
+            const actualMnemonic = bitcoin.generateMnemonic(randomBuffer)
+            assert.ok(actualMnemonic.every((v, i) => v === expectedMnemonic[i]))
+        })
+        it('generate a 9-word mnemonic', () => {
+            const randomBuffer = Buffer.from('3c2b492463aa6fc94145882f', 'hex')
+            const expectedMnemonic = 'destroy fog empower shrug plunge tool agree rain copper'.split(' ')
+            const actualMnemonic = bitcoin.generateMnemonic(randomBuffer)
+            assert.ok(actualMnemonic.every((v, i) => v === expectedMnemonic[i]))
+        })
+        it('generate a 12 word mnemonic', () => {
             const randomBuffer = Buffer.from('0c1e24e5917779d297e14d45f14e1a1a', 'hex')
             const expectedMnemonic = 'army van defense carry jealous true garbage claim echo media make crunch'.split(' ')
             const actualMnemonic = bitcoin.generateMnemonic(randomBuffer)
             assert.ok(actualMnemonic.every((v, i) => v === expectedMnemonic[i]))
         })
-        it('generate a valid mnemonic', () => {
+        it('generate a 15-word mnemonic', () => {
+            const randomBuffer = Buffer.from('34c24e2d96d7c0f632eb92672aee9ece9adeb8f4', 'hex')
+            const expectedMnemonic = 'crumble bar merge color lab kitchen slight inch grunt first police outdoor pupil fragile speak'.split(' ')
+            const actualMnemonic = bitcoin.generateMnemonic(randomBuffer)
+            assert.ok(actualMnemonic.every((v, i) => v === expectedMnemonic[i]))
+        })
+        it('generate a 18-word mnemonic', () => {
+            const randomBuffer = Buffer.from('a54d682b48bb1a0a38f4ae519727b574320224324cc3c235', 'hex')
+            const expectedMnemonic = 'pipe hero approve multiply random agree toilet noise face rice unhappy trick cage bamboo since observe season punch'.split(' ')
+            const actualMnemonic = bitcoin.generateMnemonic(randomBuffer)
+            assert.ok(actualMnemonic.every((v, i) => v === expectedMnemonic[i]))
+        })
+        it('generate a 21-word mnemonic', () => {
+            const randomBuffer = Buffer.from('3105448aa746974bc0c4df6daa2050589e81a6db33bdb76e448605ec', 'hex')
+            const expectedMnemonic = 'country clay cargo excess harvest planet adapt orbit horror extra beef raise trend square holiday jeans resist impulse canoe armed shoulder'.split(' ')
+            const actualMnemonic = bitcoin.generateMnemonic(randomBuffer)
+            assert.ok(actualMnemonic.every((v, i) => v === expectedMnemonic[i]))
+        })
+        it('generate a 24-word mnemonic', () => {
             const randomBuffer = Buffer.from('3850404b9a686cb2d61c21c3a5d1b820bbbb97c89369ae97c6df3c1fc453e544', 'hex')
             const expectedMnemonic = 'debate link base crumble man floor flash loud senior company host door roof slogan car honey purse sail result join wisdom clarify never orient'.split(' ')
             const actualMnemonic = bitcoin.generateMnemonic(randomBuffer)
             assert.ok(actualMnemonic.every((v, i) => v === expectedMnemonic[i]))
+        })
+        it('generate a 24-word mnemonic', () => {
+            const randomBuffer = Buffer.from('69ca8eb9ca2218fc349ac41647c629b563f3c726adb887c9a19b3edc4139c635', 'hex')
+            const expectedMnemonic = 'hawk federal purpose nephew canoe lawn sponsor flat bind dilemma media hello dish toe one require march escape grocery laundry series ostrich boat quantum'.split(' ')
+            const actualMnemonic = bitcoin.generateMnemonic(randomBuffer)
+            assert.ok(actualMnemonic.every((v, i) => v === expectedMnemonic[i]))
+        })
+    })
+
+    describe('getEntropyFromMnemonic', () => {
+        it('generate 32 bit entropy', () => {
+            const expectedEntropy = Buffer.from('68e5c648', 'hex')
+            const mnemonic = 'happy comfort must'.split(' ')
+            const actualEntropy = bitcoin.getEntropyFromMnemonic(mnemonic)
+            assert.ok(expectedEntropy.compare(actualEntropy) === 0)
+        })
+        it('generate 64 bit entropy', () => {
+            const expectedEntropy = Buffer.from('2d79af316ff1719e', 'hex')
+            const mnemonic = 'coin sniff slush that blade soon'.split(' ')
+            const actualEntropy = bitcoin.getEntropyFromMnemonic(mnemonic)
+            assert.ok(expectedEntropy.compare(actualEntropy) === 0)
+        })
+        it('generate 96 bit entropy', () => {
+            const expectedEntropy = Buffer.from('3c2b492463aa6fc94145882f', 'hex')
+            const mnemonic = 'destroy fog empower shrug plunge tool agree rain copper'.split(' ')
+            const actualEntropy = bitcoin.getEntropyFromMnemonic(mnemonic)
+            assert.ok(expectedEntropy.compare(actualEntropy) === 0)
+        })
+        it('generate 128 bit entropy', () => {
+            const expectedEntropy = Buffer.from('0c1e24e5917779d297e14d45f14e1a1a', 'hex')
+            const mnemonic = 'army van defense carry jealous true garbage claim echo media make crunch'.split(' ')
+            const actualEntropy = bitcoin.getEntropyFromMnemonic(mnemonic)
+            assert.ok(expectedEntropy.compare(actualEntropy) === 0)
+        })
+        it('generate 160 bit entropy', () => {
+            const expectedEntropy = Buffer.from('34c24e2d96d7c0f632eb92672aee9ece9adeb8f4', 'hex')
+            const mnemonic = 'crumble bar merge color lab kitchen slight inch grunt first police outdoor pupil fragile speak'.split(' ')
+            const actualEntropy = bitcoin.getEntropyFromMnemonic(mnemonic)
+            assert.ok(expectedEntropy.compare(actualEntropy) === 0)
+        })
+        it('generate 192 bit entropy', () => {
+            const expectedEntropy = Buffer.from('a54d682b48bb1a0a38f4ae519727b574320224324cc3c235', 'hex')
+            const mnemonic = 'pipe hero approve multiply random agree toilet noise face rice unhappy trick cage bamboo since observe season punch'.split(' ')
+            const actualEntropy = bitcoin.getEntropyFromMnemonic(mnemonic)
+            assert.ok(expectedEntropy.compare(actualEntropy) === 0)
+        })
+        it('generate 224 bit entropy', () => {
+            const expectedEntropy = Buffer.from('3105448aa746974bc0c4df6daa2050589e81a6db33bdb76e448605ec', 'hex')
+            const mnemonic = 'country clay cargo excess harvest planet adapt orbit horror extra beef raise trend square holiday jeans resist impulse canoe armed shoulder'.split(' ')
+            const actualEntropy = bitcoin.getEntropyFromMnemonic(mnemonic)
+            assert.ok(expectedEntropy.compare(actualEntropy) === 0)
+        })
+        it('generate 256 bit entropy', () => {
+            const expectedEntropy = Buffer.from('3850404b9a686cb2d61c21c3a5d1b820bbbb97c89369ae97c6df3c1fc453e544', 'hex')
+            const mnemonic = 'debate link base crumble man floor flash loud senior company host door roof slogan car honey purse sail result join wisdom clarify never orient'.split(' ')
+            const actualEntropy = bitcoin.getEntropyFromMnemonic(mnemonic)
+            assert.ok(expectedEntropy.compare(actualEntropy) === 0)
+        })
+        it('generate 256 bit entropy', () => {
+            const expectedEntropy = Buffer.from('69ca8eb9ca2218fc349ac41647c629b563f3c726adb887c9a19b3edc4139c635', 'hex')
+            const mnemonic = 'hawk federal purpose nephew canoe lawn sponsor flat bind dilemma media hello dish toe one require march escape grocery laundry series ostrich boat quantum'.split(' ')
+            const actualEntropy = bitcoin.getEntropyFromMnemonic(mnemonic)
+            assert.ok(expectedEntropy.compare(actualEntropy) === 0)
         })
     })
 
